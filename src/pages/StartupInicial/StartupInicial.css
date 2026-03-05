@@ -1,0 +1,58 @@
+/* Container dos cards iniciais */
+.startup-cards-container {
+  display: flex;
+  gap: 30px;
+  padding: 20px;
+  justify-content: flex-start;
+}
+
+
+
+.startup-card-option {
+  background: #ffffff;
+  width: 320px;
+  height: 180px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  gap: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid #34d399;
+}
+
+.startup-card-option:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.card-icon-wrapper {
+  background: #f0fdf4;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.card-text h3 {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.card-text h2 {
+  font-size: 24px;
+  color: #0f172a;
+  margin: 0;
+  font-weight: 900;
+}
+
+/* Estilos para o formulário StartupProjeto (Seções dos prints) */
+.form-section-container {
+  background: white;
+  border-radius: 40px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border-left: 12px solid #000; /* A borda preta lateral dos seus prints */
+}

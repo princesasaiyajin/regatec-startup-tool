@@ -1,0 +1,146 @@
+.login-screen {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8fafc; 
+}
+
+.login-card {
+  background: #ffffff;
+  padding: 60px 50px;
+  border-radius: 56px; 
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  width: 550px;
+  max-width: 90vw;
+  text-align: center;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.logo-area {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.logo-glow {
+  position: absolute;
+  inset: 0;
+  background-color: #34d399; 
+  filter: blur(20px);
+  opacity: 0.2;
+  border-radius: 50%;
+}
+
+.logo-box {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  background-color: #041410; 
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  border: 2px solid rgba(52, 211, 153, 0.2);
+}
+
+.login-header h1 {
+  font-size: 36px;
+  font-weight: 900;
+  color: #041410;
+  letter-spacing: -1.5px;
+  text-transform: uppercase;
+  margin: 15px 0 5px;
+}
+
+
+.startup-line-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(52, 211, 153, 0.3);
+}
+
+.startup-text {
+  color: #059669; 
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.input-group label {
+  font-size: 11px;
+  font-weight: 900;
+  color: #041410;
+  display: block;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 18px 20px 18px 52px;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  background-color: #ffffff;
+  font-size: 15px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+  border-color: #10b981;
+}
+
+
+.field-icon {
+  position: absolute;
+  left: 18px;
+  color: #94a3b8;
+}
+
+.btn-access {
+  width: 100%;
+  padding: 20px;
+  background-color: #041410;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 16px;
+  text-transform: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+}
+
+.btn-access:active {
+  transform: scale(0.96);
+}

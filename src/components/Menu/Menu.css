@@ -1,0 +1,137 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  min-width: 260px;
+  background-color: #041410;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  color: white;
+  position: sticky;
+  left: 0;
+  top: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 50px;
+}
+
+.sidebar-logo-box {
+  background: rgba(52, 211, 153, 0.1);
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.sidebar-title .brand {
+  display: block;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -1px;
+}
+
+.sidebar-title .subtitle {
+  font-size: 9px;
+  color: #34d399;
+  letter-spacing: 2px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-nav li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #a1a1aa;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 5px;
+}
+
+.sidebar-nav li.active {
+  background: rgba(52, 211, 153, 0.1);
+  color: white;
+  border-right: 4px solid #34d399;
+}
+
+.sidebar-nav li:hover {
+  color: #34d399;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: #10b981;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+}
+
+.user-name { font-size: 12px; font-weight: 900; }
+.user-role { font-size: 9px; color: #10b981; }
+
+.btn-logout {
+  background: none;
+  border: none;
+  color: #a1a1aa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-section-group {
+  margin-top: 30px;
+}
+
+.section-operacional {
+  display: flex;
+  align-items: center;
+  color: #ffffff; 
+}
+
+.sidebar-nav li:hover {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.05);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
