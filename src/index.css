@@ -1,3 +1,13 @@
+#root {
+  --primary-color: #041410;
+  --secondary-color: #10b981;
+  --color-destructive:  #ef4444;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: row;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -19,9 +29,3 @@ body {
   color: #333;
 }
 
-#root {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-  flex-direction: row;
-}

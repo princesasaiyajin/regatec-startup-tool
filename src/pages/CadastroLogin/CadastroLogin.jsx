@@ -1,78 +1,81 @@
-import React, { useState } from 'react';
-import '../../styles/Cadastro.css'; 
-import { UserPlus, Edit3, Trash2, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import './../../styles/Cadastro.css';
+import { UserPlus, Edit, Trash2, X, Loader2 } from 'lucide-react';
 
-function CadastroLogin() { 
-  const [usuarios, setUsuarios] = useState([
-    
-  ]);
-
+function CadastroLogin() {
+  const [usuarios, setUsuarios] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [usuarioEditando, setUsuarioEditando] = useState(null);
-  const [formData, setFormData] = useState({ nome: '', email: '', tipo: 'administrativo' });
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+       nome: '',
+  email: '',
+  senha: '123', 
+  nivel: 'Vendedor', 
+  telefone: ''
+ });
 
-  const menuItems = [
-    "Dados Cadastrais", "Logins de Acesso", "Vendedor", "Projetista", 
-    "Dados da Obra", "Fases do Projeto", "Fases da Obra", "Tipo do Contato", 
-    "Operacional", "Startup Inicial", "Aditivos", "Workflow"
-  ];
+  // Busca usuários ao carregar
+  useEffect(() => { fetchUsuarios(); }, []);
 
-  const handleSave = (e) => {
+  const fetchUsuarios = async () => {
+    try {
+      const token = localStorage.getItem('@Regatec:token');
+      const response = await fetch('https://regatec.api.etetis.com.br/usuarios', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      } );
+      const data = await response.json();
+      setUsuarios(Array.isArray(data) ? data : []);
+    } catch (error) { console.error("Erro ao buscar", error); }
+  };
+
+  const handleSave = async (e) => {
     e.preventDefault();
-    if (usuarioEditando) {
-      setUsuarios(usuarios.map(u => u.id === usuarioEditando.id ? { ...formData, id: u.id } : u));
-    } else {
-      setUsuarios([...usuarios, { ...formData, id: Date.now() }]);
-    }
-    closeModal();
-  };
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('@Regatec:token');
+      const response = await fetch('https://regatec.api.etetis.com.br/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(formData ),
+      });
 
-  const handleDelete = (id) => {
-    if (window.confirm("Deseja realmente excluir este usuário?")) {
-      setUsuarios(usuarios.filter(u => u.id !== id));
-    }
-  };
-
-  const openEditModal = (usuario) => {
-    setUsuarioEditando(usuario);
-    setFormData({ nome: usuario.nome, email: usuario.email, tipo: usuario.tipo });
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setUsuarioEditando(null);
-    setFormData({ nome: '', email: '', tipo: 'administrativo' });
+      if (response.ok) {
+        setIsModalOpen(false);
+        setFormData({ nome: '', email: '', telefone: '' });
+        fetchUsuarios(); 
+      }
+    } catch (error) { alert("Erro ao salvar"); }
+    finally { setLoading(false); }
   };
 
   return (
-    <div className="content-area">
-      <header className="content-header">
+    <div className="logins-page">
+      <div className="logins-header">
         <h1>LOGINS</h1>
-        <button className="btn-new-user" onClick={() => setIsModalOpen(true)}>
-          <UserPlus size={18} /> NOVO USUÁRIO
+        <button className="btn-novo-usuario" onClick={() => setIsModalOpen(true)}>
+          <UserPlus size={20} /> NOVO USUÁRIO
         </button>
-      </header>
+      </div>
 
-      <div className="data-card">
-        <table className="data-table">
+      <div className="table-container">
+        <table className="logins-table">
           <thead>
             <tr>
-              <th>COLABORADOR</th>
+              <th>VENDEDOR</th>
               <th>E-MAIL</th>
-              <th>TIPO</th>
+              <th>TELEFONE</th>
               <th>AÇÕES</th>
             </tr>
           </thead>
           <tbody>
             {usuarios.map((user) => (
               <tr key={user.id}>
-                <td><span className="colaborador-name">{user.nome}</span></td>
-                <td><span className="email-text">{user.email}</span></td>
-                <td><span className="tipo-badge">{user.tipo}</span></td>
+                <td>{user.nome}</td>
+                <td>{user.email}</td>
+                <td>{user.telefone}</td>
                 <td className="actions-cell">
-                  <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(user)} />
-                  <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(user.id)} />
+                  <button className="btn-edit"><Edit size={16} /></button>
+                  <button className="btn-delete"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -82,61 +85,57 @@ function CadastroLogin() {
 
       {isModalOpen && (
         <div className="modal-overlay">
-          <div className="modal-container">
-            <header className="modal-header">
-              <h2>{usuarioEditando ? 'EDITAR LOGIN' : 'NOVO USUÁRIO'}</h2>
-              <button className="close-button" onClick={closeModal}><X size={24} /></button>
-            </header>
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>NOVO USUÁRIO</h2>
+              <button className="btn-close" onClick={() => setIsModalOpen(false)}>
+                <X size={24} color="#94a3b8" />
+              </button>
+            </div>
 
             <form onSubmit={handleSave}>
-              <div className="form-group">
-                <label>NOME DO COLABORADOR</label>
-                <input 
-                  type="text" required                  value={formData.nome}
-                  onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>E-MAIL CORPORATIVO</label>
-                <input 
-                  type="email" required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>TIPO DE LOGIN</label>
-                <select 
-                  className="modal-select"
-                  value={formData.tipo}
-                  onChange={(e) => setFormData({...formData, tipo: e.target.value})}
-                >
-                  <option value="
-                administrativo">Administrativo</option>
-                  <option value="editor">Editor</option>
-                  <option value="visualizador">Visualizador</option>
-                </select>
-              </div>
-
-              {formData.tipo === 'visualizador' && (
-                <div className="permissions-area">
-                  <label>PERMISSÕES DE VISUALIZAÇÃO:</label>
-                  <div className="permissions-grid">
-                    {menuItems.map(item => (
-                      <label key={item} className="checkbox-label">
-                        <input type="checkbox" /> {item}
-                      </label>
-                    ))}
-                  </div>
+              <div className="modal-body">
+                <div className="modal-input-group">
+                  <label>NOME DO VENDEDOR</label>
+                  <input 
+                    type="text" 
+                    placeholder="Digite o nome..."
+                    value={formData.nome}
+                    onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                    required 
+                  />
                 </div>
-              )}
 
-              <footer className="modal-footer">
-                <button type="button" className="btn-cancel" onClick={closeModal}>CANCELAR</button>
-                <button type="submit" className="btn-save">SALVAR LOGIN</button>
-              </footer>
+                <div className="modal-input-group">
+                  <label>E-MAIL CORPORATIVO</label>
+                  <input 
+                    type="email" 
+                    placeholder="email@regatec.com.br"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    required 
+                  />
+                </div>
+
+                <div className="modal-input-group">
+                  <label>TELEFONE</label>
+                  <input 
+                    type="text" 
+                    placeholder="(00) 00000-0000"
+                    value={formData.telefone}
+                    onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button type="button" className="btn-cancelar" onClick={() => setIsModalOpen(false)}>
+                  CANCELAR
+                </button>
+                <button type="submit" className="btn-salvar-login" disabled={loading}>
+                  {loading ? <Loader2 className="animate-spin" /> : 'SALVAR LOGIN'}
+                </button>
+              </div>
             </form>
           </div>
         </div>

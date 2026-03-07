@@ -7,12 +7,11 @@
   box-sizing: border-box;
 }
 
-
 .content-header {
  display: flex;
-  justify-content: space-between; /* Empurra um para cada lado */
-  align-items: center;           /* Alinha verticalmente no meio */
-  width: 95%;                    /* Garante que não cole nas bordas da tela */
+  justify-content: space-between; 
+  align-items: center;           
+  width: 95%;                    
   margin: 20px auto 30px auto;
 }
 
@@ -24,7 +23,7 @@
 }
 
 .btn-new-user {
-  background-color: #059669; 
+  background-color: var(--secondary-color); 
   color: white;
   border: none;
   padding: 15px 30px;
@@ -93,8 +92,8 @@
   gap: 20px;
 }
 
-.icon-edit { color: #10b981; cursor: pointer; }
-.icon-delete { color: #ef4444; cursor: pointer; }
+.icon-edit { color: variavel(--secondary-color); cursor: pointer; }
+.icon-delete { color:  var(--color-destructive); cursor: pointer; }
 
 
 .modal-overlay {
@@ -148,8 +147,7 @@
   transition: 0.2s;
 }
 
-.close-button:hover { color: #ef4444; }
-
+.close-button:hover { color: var(--color-destructive); }
 
 .form-group {
   margin-bottom: 20px;
@@ -215,7 +213,7 @@
 }
 
 .btn-save {
-  background: #059669;
+  background: var(--secondary-color);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -257,9 +255,8 @@
   padding-right: 40px !important;
 }
 
-.icon-edit { color: #10b981; cursor: pointer; }
-.icon-delete { color: #ef4444; cursor: pointer; }
-
+.icon-edit { color: var(--secondary-color); cursor: pointer; }
+.icon-delete { color: var(--color-destructive); cursor: pointer; }
 
 .modal-overlay {
   position: fixed;

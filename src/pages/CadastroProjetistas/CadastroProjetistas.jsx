@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import '../../styles/Cadastro.css'; 
 import { UserPlus, Edit3, Trash2, X } from 'lucide-react';
 
-function CadastroVendedor () { 
+function CadastroProjetistas () { 
   const [usuarios, setUsuarios] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   
-  // Alterado: Removido 'tipo' e adicionado 'telefone'
   const [formData, setFormData] = useState({ nome: '', email: '', telefone: '' });
 
   const handleSave = (e) => {
@@ -29,7 +28,6 @@ function CadastroVendedor () {
 
   const openEditModal = (usuario) => {
     setUsuarioEditando(usuario);
-    // Sincroniza os dados do usuário com o formulário do modal
     setFormData({ nome: usuario.nome, email: usuario.email, telefone: usuario.telefone });
     setIsModalOpen(true);
   };
@@ -53,7 +51,7 @@ function CadastroVendedor () {
         <table className="data-table">
           <thead>
             <tr>
-              <th>VENDEDOR</th>
+              <th>PROJETISTA</th>
               <th>E-MAIL</th>
               <th>TELEFONE</th>
               <th>AÇÕES</th>
@@ -64,7 +62,6 @@ function CadastroVendedor () {
               <tr key={user.id}>
                 <td><span className="colaborador-name">{user.nome}</span></td>
                 <td><span className="email-text">{user.email}</span></td>
-                {/* Alterado: Exibe o telefone cadastrado */}
                 <td><span className="telefone-text">{user.telefone}</span></td>
                 <td className="actions-cell">
                   <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(user)} />
@@ -86,7 +83,7 @@ function CadastroVendedor () {
 
             <form onSubmit={handleSave}>
               <div className="form-group">
-                <label>NOME DO VENDEDOR</label>
+                <label>NOME DO PROJETISTA</label>
                 <input 
                   type="text" 
                   required 
@@ -105,7 +102,6 @@ function CadastroVendedor () {
                 />
               </div>
 
-              {/* Alterado: Campo de Telefone no lugar do Seletor de Tipo */}
               <div className="form-group">
                 <label>TELEFONE</label>
                 <input 
@@ -128,4 +124,4 @@ function CadastroVendedor () {
   );
 }
 
-export default CadastroVendedor;
+export default CadastroProjetistas;

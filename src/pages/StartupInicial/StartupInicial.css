@@ -1,12 +1,9 @@
-/* Container dos cards iniciais */
 .startup-cards-container {
   display: flex;
   gap: 30px;
   padding: 20px;
   justify-content: flex-start;
 }
-
-
 
 .startup-card-option {
   background: #ffffff;
@@ -20,7 +17,7 @@
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   transition: transform 0.2s, box-shadow 0.2s;
-  border: 2px solid #34d399;
+  border: 2px solid var(--secondary-color);
 }
 
 .startup-card-option:hover {
@@ -47,12 +44,11 @@
   font-weight: 900;
 }
 
-/* Estilos para o formulário StartupProjeto (Seções dos prints) */
 .form-section-container {
   background: white;
   border-radius: 40px;
   margin-bottom: 30px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  border-left: 12px solid #000; /* A borda preta lateral dos seus prints */
+  border-left: 12px solid #000; 
 }

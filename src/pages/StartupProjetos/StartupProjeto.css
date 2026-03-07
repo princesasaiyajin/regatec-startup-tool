@@ -1,6 +1,4 @@
 :root {
-    --primary-color: #041410;
-    --secondary-color: #10b981;
     --bg-color: #f8fafc;
     --card-bg: #ffffff;
     --border-color: #e2e8f0;
@@ -13,6 +11,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.title {
+  color: var(--primary-color);
 }
 
 .container {
@@ -28,7 +30,6 @@
     margin-top: 1.5rem;
 }
 
-/* Card Styles */
 .card {
     background: var(--card-bg);
     border-left: 8px solid var(--primary-color);
@@ -74,7 +75,7 @@
 .badge {
     width: 3rem;
     height: 3rem;
-    background: var(--primary-color);
+    background: var(--secondary-color);
     color: white;
     border-radius: 1rem;
     display: flex;
@@ -103,7 +104,6 @@
     flex-shrink: 0;
 }
 
-/* Collapse/Expand Logic */
 .card-content {
     padding: 2rem;
     max-height: 3000px;
@@ -135,7 +135,6 @@
     transform: rotate(0deg);
 }
 
-/* Grid System */
 .grid {
     display: grid;
     gap: 1rem;
@@ -156,7 +155,6 @@
 
 .col-span-2 { grid-column: span 2; }
 
-/* Form Elements */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -212,7 +210,6 @@
     resize: vertical;
 }
 
-/* Buttons */
 .search-btn {
     position: absolute;
     right: 0.75rem;
@@ -220,7 +217,7 @@
     border: none;
     padding: 0.4rem;
     border-radius: 0.5rem;
-    color: #059669;
+    color: var(--secondary-color);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -235,7 +232,7 @@
 .copy-btn {
     font-size: 10px;
     font-weight: 900;
-    color: #059669;
+    color: var(--secondary-color);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     background: #ecfdf5;
@@ -260,11 +257,11 @@
 }
 
 .submit-btn {
-    background: var(--primary-color);
+    background: var(--secondary-color);
     color: white;
     font-weight: 900;
     padding: 1.25rem 4rem;
-    border-radius: 2rem;
+    border-radius: 1rem;
     border: none;
     cursor: pointer;
     display: flex;
@@ -276,8 +273,8 @@
 }
 
 .submit-btn:hover {
-    background: #064e3b;
-    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--secondary-color);
+    transform: all 0.3s ease;
 }
 
 .submit-btn:active {
@@ -295,7 +292,6 @@
     padding-top: 2rem;
 }
 
-/* Helpers */
 .border-top { border-top: 1px solid #f1f5f9; }
 .pt-4 { padding-top: 1rem; }
 .pb-20 { padding-bottom: 5rem; }
@@ -317,7 +313,6 @@
     height: 14px;
 }
 
-/* Fases do Projeto */
 .fases-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

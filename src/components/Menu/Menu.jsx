@@ -26,21 +26,19 @@ function Menu({ activeTab, setActiveTab }) {
             <Users size={18} /> Logins de Acesso
           </li>
           <li onClick={() => setActiveTab('vendedor')} ><Briefcase size={18} /> Vendedor</li>
-          <li onClick={() => setActiveTab('projetista')}><Settings size={18} /> Projetista</li>
+          <li onClick={() => setActiveTab('projetistas')}><Settings size={18} /> Projetistas</li>
           <li onClick={() => setActiveTab('dados-obra')}><HardHat size={18} /> Dados da Obra</li>
           <li onClick={() => setActiveTab('fases-projeto')}><GanttChartSquare size={18} /> Fases do Projeto</li>
           <li onClick={() => setActiveTab('fases-obra')}><Hammer size={18} /> Fases da Obra</li>
-          <li onClick={() => setActiveTab('tipo-contato')}><Phone size={18} /> Tipo do Contato</li>
+          <li onClick={() => setActiveTab('tipos-contato')}><Phone size={18} /> Tipo do Contato</li>
         </ul>
-
         
         <div className="nav-section-group">
            <p className="nav-section-title section-operacional">
              <Activity size={16} style={{marginRight: '8px'}} /> OPERACIONAL
            </p>
            <ul>
-             {/* Adicionamos o onClick e a lógica de classe ativa */}
-  <li 
+        <li 
     className={activeTab === 'startup' ? 'active' : ''} 
     onClick={() => setActiveTab('startup')}
   >

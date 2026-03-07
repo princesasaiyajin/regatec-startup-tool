@@ -35,7 +35,7 @@
 
 .sidebar-title .subtitle {
   font-size: 9px;
-  color: #34d399;
+  color: var(--secondary-color);
   letter-spacing: 2px;
 }
 
@@ -68,7 +68,7 @@
 .sidebar-nav li.active {
   background: rgba(52, 211, 153, 0.1);
   color: white;
-  border-right: 4px solid #34d399;
+  border-right: 4px solid var(--secondary-color);
 }
 
 .sidebar-nav li:hover {
@@ -91,7 +91,7 @@
 .user-avatar {
   width: 40px;
   height: 40px;
-  background: #10b981;
+  background: var(--secondary-color);
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -100,7 +100,7 @@
 }
 
 .user-name { font-size: 12px; font-weight: 900; }
-.user-role { font-size: 9px; color: #10b981; }
+.user-role { font-size: 9px; color: var(--secondary-color); }
 
 .btn-logout {
   background: none;
@@ -125,7 +125,7 @@
 }
 
 .sidebar-nav li:hover {
-  color: #34d399;
+  color: var(--secondary-color);
   background: rgba(52, 211, 153, 0.05);
 }
 
