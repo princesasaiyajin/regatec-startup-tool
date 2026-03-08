@@ -1,145 +1,142 @@
 import React, { useState, useEffect } from 'react';
-import './../../styles/Cadastro.css';
-import { UserPlus, Edit, Trash2, X, Loader2 } from 'lucide-react';
+import '../../styles/Cadastro.css'; // Usando o seu arquivo de estilo padrão
+import { Users, Mail, Lock, Shield, Save, Loader2 } from 'lucide-react';
 
 function CadastroLogin() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // 1. Estado para os campos (usando os nomes que a API espera)
   const [formData, setFormData] = useState({
-       nome: '',
-  email: '',
-  senha: '123', 
-  nivel: 'Vendedor', 
-  telefone: ''
- });
+    nome: '',
+    email: '',
+    senha: '123',
+    nivel: 'Vendedor'
+  });
 
-  // Busca usuários ao carregar
-  useEffect(() => { fetchUsuarios(); }, []);
+  const [loading, setLoading] = useState(false);
 
-  const fetchUsuarios = async () => {
-    try {
-      const token = localStorage.getItem('@Regatec:token');
-      const response = await fetch('https://regatec.api.etetis.com.br/usuarios', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      } );
-      const data = await response.json();
-      setUsuarios(Array.isArray(data) ? data : []);
-    } catch (error) { console.error("Erro ao buscar", error); }
+  // 2. Função para atualizar os campos (sem mudar seu HTML)
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = async (e) => {
+  // 3. Função para salvar na API
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const token = localStorage.getItem('@Regatec:token');
-      const response = await fetch('https://regatec.api.etetis.com.br/usuarios', {
+      const response = await fetch('https://regatec.api.etetis.com.br/api/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(formData ),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nome: formData.nome,
+          email: formData.email,
+          password: formData.senha, // API espera 'password'
+          nivel: formData.nivel
+        } ),
       });
 
       if (response.ok) {
-        setIsModalOpen(false);
-        setFormData({ nome: '', email: '', telefone: '' });
-        fetchUsuarios(); 
+        alert('Usuário cadastrado com sucesso!');
+        setFormData({ nome: '', email: '', senha: '123', nivel: 'Vendedor' });
+      } else {
+        alert('Erro ao cadastrar usuário.');
       }
-    } catch (error) { alert("Erro ao salvar"); }
-    finally { setLoading(false); }
+    } catch (error) {
+      alert('Erro de conexão com o servidor.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="logins-page">
-      <div className="logins-header">
-        <h1>LOGINS</h1>
-        <button className="btn-novo-usuario" onClick={() => setIsModalOpen(true)}>
-          <UserPlus size={20} /> NOVO USUÁRIO
-        </button>
+    <div className="cadastro-container">
+      <div className="cadastro-header">
+        <div className="header-icon">
+          <Users size={24} color="#34d399" />
+        </div>
+        <div className="header-text">
+          <h2>Cadastro de Logins</h2>
+          <p>Gerencie os acessos ao ecossistema Regatec</p>
+        </div>
       </div>
 
-      <div className="table-container">
-        <table className="logins-table">
-          <thead>
-            <tr>
-              <th>VENDEDOR</th>
-              <th>E-MAIL</th>
-              <th>TELEFONE</th>
-              <th>AÇÕES</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usuarios.map((user) => (
-              <tr key={user.id}>
-                <td>{user.nome}</td>
-                <td>{user.email}</td>
-                <td>{user.telefone}</td>
-                <td className="actions-cell">
-                  <button className="btn-edit"><Edit size={16} /></button>
-                  <button className="btn-delete"><Trash2 size={16} /></button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>NOVO USUÁRIO</h2>
-              <button className="btn-close" onClick={() => setIsModalOpen(false)}>
-                <X size={24} color="#94a3b8" />
-              </button>
+      {/* Mantendo sua estrutura de formulário original */}
+      <form className="cadastro-form" onSubmit={handleSubmit}>
+        <div className="form-grid">
+          <div className="input-group">
+            <label>NOME COMPLETO</label>
+            <div className="input-wrapper">
+              <Users className="field-icon" size={18} />
+              <input 
+                type="text" 
+                name="nome"
+                value={formData.nome}
+                onChange={handleChange}
+                placeholder="Ex: João Silva" 
+                required 
+              />
             </div>
+          </div>
 
-            <form onSubmit={handleSave}>
-              <div className="modal-body">
-                <div className="modal-input-group">
-                  <label>NOME DO VENDEDOR</label>
-                  <input 
-                    type="text" 
-                    placeholder="Digite o nome..."
-                    value={formData.nome}
-                    onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                    required 
-                  />
-                </div>
+          <div className="input-group">
+            <label>E-MAIL DE ACESSO</label>
+            <div className="input-wrapper">
+              <Mail className="field-icon" size={18} />
+              <input 
+                type="email" 
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="email@regatec.com.br" 
+                required 
+              />
+            </div>
+          </div>
 
-                <div className="modal-input-group">
-                  <label>E-MAIL CORPORATIVO</label>
-                  <input 
-                    type="email" 
-                    placeholder="email@regatec.com.br"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    required 
-                  />
-                </div>
+          <div className="input-group">
+            <label>SENHA PROVISÓRIA</label>
+            <div className="input-wrapper">
+              <Lock className="field-icon" size={18} />
+              <input 
+                type="password" 
+                name="senha"
+                value={formData.senha}
+                onChange={handleChange}
+                placeholder="••••••••" 
+                required 
+              />
+            </div>
+          </div>
 
-                <div className="modal-input-group">
-                  <label>TELEFONE</label>
-                  <input 
-                    type="text" 
-                    placeholder="(00) 00000-0000"
-                    value={formData.telefone}
-                    onChange={(e) => setFormData({...formData, telefone: e.target.value})}
-                  />
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                <button type="button" className="btn-cancelar" onClick={() => setIsModalOpen(false)}>
-                  CANCELAR
-                </button>
-                <button type="submit" className="btn-salvar-login" disabled={loading}>
-                  {loading ? <Loader2 className="animate-spin" /> : 'SALVAR LOGIN'}
-                </button>
-              </div>
-            </form>
+          <div className="input-group">
+            <label>NÍVEL DE ACESSO</label>
+            <div className="input-wrapper">
+              <Shield className="field-icon" size={18} />
+              <select name="nivel" value={formData.nivel} onChange={handleChange}>
+                <option value="Master Admin">Master Admin</option>
+                <option value="Vendedor">Vendedor</option>
+                <option value="Projetista">Projetista</option>
+                <option value="Operacional">Operacional</option>
+              </select>
+            </div>
           </div>
         </div>
-      )}
+
+        <div className="form-actions">
+          <button type="submit" className="btn-save" disabled={loading}>
+            {loading ? (
+              <><Loader2 className="animate-spin" size={18} style={{marginRight: '8px'}} /> SALVANDO...</>
+            ) : (
+              <><Save size={18} style={{marginRight: '8px'}} /> SALVAR CADASTRO</>
+            )}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
