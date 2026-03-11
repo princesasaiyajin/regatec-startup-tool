@@ -54,7 +54,7 @@ function Login({ onLogin }) {
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
-          {error && <div style={{ color: '#ff4d4d', fontSize: '12px', marginBottom: '10px', textAlign: 'center' }}>{error}</div>}
+          {error && <div style={{ color: 'var(--error-color)', fontSize: '12px', marginBottom: '10px', textAlign: 'center' }}>{error}</div>}
           
           <div className="input-group">
             <label>E-MAIL CORPORATIVO</label>

@@ -25,7 +25,7 @@ function App() {
         <div style={{ display: 'flex', width: '100vw', minHeight: '100vh' }}>
           <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
           
-          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowX: 'hidden', marginLeft: '280px' }}>
             {activeTab === 'logins' && <CadastroLogin />}
             {activeTab === 'vendedor' && <CadastroVendedor />}
             {activeTab === 'projetistas' && <CadastroProjetistas />}
