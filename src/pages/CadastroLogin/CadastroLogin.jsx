@@ -77,19 +77,30 @@ function LoginAcesso() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Deseja realmente excluir este usuário?")) {
-      try {
-        const token = localStorage.getItem('@Regatec:token');
-        await api.delete(`/users/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        carregarUsuarios();
-      } catch (error) {
-        console.error("Erro ao deletar", error);
-      }
+const handleDelete = async (id) => {
+
+  console.log("ID que chegou para deletar:", id); 
+
+  if (window.confirm("Deseja realmente excluir este usuário?")) {
+    try {
+      const token = localStorage.getItem('@Regatec:token');
+      
+      // CERTIFIQUE-SE DE QUE A URL ESTÁ CORRETA:
+      await api.delete(`users/${id}`, {
+        headers: { Authorization: `Bearer ${token}`,
+          'Access-Control-Allow-Origin': '*',
+         }
+      });
+
+      alert("Usuário excluído com sucesso!");
+      carregarUsuarios(); // Recarrega a lista
+    } catch (error) {
+      console.error("Erro ao deletar", error);
+      alert("Erro ao excluir: " + (error.response?.data?.message || "Verifique as permissões."));
     }
-  };
+  }
+};
+
 
   const openEditModal = (usuario) => {
     setUsuarioEditando(usuario);

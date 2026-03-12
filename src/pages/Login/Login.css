@@ -1,3 +1,15 @@
+.login-page-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #ffffff; /* Cor de fundo da tela de login */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
 .login-screen {
   min-height: 100vh;
   width: 100%;
