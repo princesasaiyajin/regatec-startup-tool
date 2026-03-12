@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css'; 
 import Login from './pages/Login/Login';
 import Menu from './components/Menu/Menu';
@@ -13,17 +13,33 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState('logins');
 
+  // Esse é o nosso "vigia" que roda ao carregar a página
+  useEffect(() => {
+    const token = localStorage.getItem('@Regatec:token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
+
+  const handleLogout = () => {
+  localStorage.removeItem('@Regatec:token'); // Remove o token para não entrar direto no F5
+  setIsLoggedIn(false); // Volta para a tela de login
+};
 
   return (
     <div className="app-container">
       {!isLoggedIn ? (
         <Login onLogin={handleLogin} />
       ) : (
+        
         <div style={{ display: 'flex', width: '100vw', minHeight: '100vh' }}>
-          <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Menu activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          onLogout={handleLogout} />
           
           <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowX: 'hidden', marginLeft: '280px' }}>
             {activeTab === 'logins' && <CadastroLogin />}

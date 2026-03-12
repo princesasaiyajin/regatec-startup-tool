@@ -5,7 +5,7 @@ import {
   Activity, ClipboardCheck, PlusSquare, Share2, LogOut 
 } from 'lucide-react';
 
-function Menu({ activeTab, setActiveTab }) {
+function Menu({ activeTab, setActiveTab, onLogout }) {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -70,7 +70,7 @@ function Menu({ activeTab, setActiveTab }) {
             <p className="user-role">MASTER ADMIN</p>
           </div>
         </div>
-        <button className="btn-logout">
+        <button className="btn-logout" onClick={onLogout}>
           <LogOut size={16} /> SAIR
         </button>
       </div>

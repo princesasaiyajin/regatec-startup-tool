@@ -84,8 +84,7 @@ const handleDelete = async (id) => {
   if (window.confirm("Deseja realmente excluir este usuário?")) {
     try {
       const token = localStorage.getItem('@Regatec:token');
-      
-      // CERTIFIQUE-SE DE QUE A URL ESTÁ CORRETA:
+  
       await api.delete(`users/${id}`, {
         headers: { Authorization: `Bearer ${token}`,
           'Access-Control-Allow-Origin': '*',
@@ -93,14 +92,13 @@ const handleDelete = async (id) => {
       });
 
       alert("Usuário excluído com sucesso!");
-      carregarUsuarios(); // Recarrega a lista
+      carregarUsuarios(); 
     } catch (error) {
       console.error("Erro ao deletar", error);
       alert("Erro ao excluir: " + (error.response?.data?.message || "Verifique as permissões."));
     }
   }
 };
-
 
   const openEditModal = (usuario) => {
     setUsuarioEditando(usuario);

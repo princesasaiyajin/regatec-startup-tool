@@ -11,7 +11,7 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(''); // Limpa erros anteriores antes de tentar
+    setError(''); 
     
     try {
       const response = await fetch('https://regatec.api.etetis.com.br/api/auth/login', {
@@ -23,7 +23,6 @@ function Login({ onLogin }) {
       const result = await response.json();
 
       if (response.ok) {
-        // O token está em result.data.token conforme vimos no seu log
         localStorage.setItem('@Regatec:token', result.data.token);
         onLogin();
       } else {
@@ -41,7 +40,6 @@ function Login({ onLogin }) {
       <div className="login-screen">
         <div className="login-card">
           
-          {/* AREA DO LOGO */}
           <div className="logo-area">
             <div className="logo-glow"></div>
             <div className="logo-box">
@@ -49,7 +47,6 @@ function Login({ onLogin }) {
             </div>
           </div>
 
-          {/* CABEÇALHO */}
           <div className="login-header">
             <h1>REGATEC</h1>
             <div className="startup-line-container">
@@ -59,11 +56,10 @@ function Login({ onLogin }) {
             </div>
           </div>
 
-          {/* FORMULÁRIO (Agora dentro do card branco) */}
           <form className="login-form" onSubmit={handleSubmit}>
             {error && (
               <div style={{ 
-                color: '#ef4444', 
+                color: 'var(--color-destructive)', 
                 fontSize: '13px', 
                 marginBottom: '15px', 
                 fontWeight: '600' 
@@ -109,7 +105,7 @@ function Login({ onLogin }) {
             </button>
           </form>
 
-        </div> {/* Fim do login-card */}
+        </div> 
       </div>
     </div>
   );
