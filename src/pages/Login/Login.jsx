@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { Mail, Lock, Building2, Loader2 } from 'lucide-react';
+import { Mail, Lock, Loader2 } from 'lucide-react'; 
+import logoRegatec from '../../assets/logo-regatec.png'; 
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -43,12 +44,12 @@ function Login({ onLogin }) {
           <div className="logo-area">
             <div className="logo-glow"></div>
             <div className="logo-box">
-              <Building2 size={48} color="#10b981" />
+              <img src={logoRegatec} alt="Logo Regatec" className="login-logo-img" />
             </div>
           </div>
 
           <div className="login-header">
-            <h1>REGATEC</h1>
+            
             <div className="startup-line-container">
               <div className="line"></div>
               <span className="startup-text">Startup</span>
@@ -56,14 +57,10 @@ function Login({ onLogin }) {
             </div>
           </div>
 
+          {/* ... resto do formulário igual ... */}
           <form className="login-form" onSubmit={handleSubmit}>
             {error && (
-              <div style={{ 
-                color: 'var(--color-destructive)', 
-                fontSize: '13px', 
-                marginBottom: '15px', 
-                fontWeight: '600' 
-              }}>
+              <div style={{ color: 'red', fontSize: '13px', marginBottom: '15px', fontWeight: '600' }}>
                 {error}
               </div>
             )}
@@ -104,7 +101,6 @@ function Login({ onLogin }) {
               )}
             </button>
           </form>
-
         </div> 
       </div>
     </div>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import '../../styles/Cadastro.css';
-import { UserPlus, Edit3, Trash2, X } from 'lucide-react';
+import { UserPlus, Edit3, Trash2, X, Key } from 'lucide-react';
 
 function LoginAcesso() {
   const [usuarios, setUsuarios] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
+  const [alterarSenha, setAlterarSenha] = useState(false); 
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -43,19 +44,24 @@ function LoginAcesso() {
     const dadosParaEnviar = {
       name: formData.nome,
       corporate_email: formData.email,
-      password: formData.senha,
       type: formData.tipo,
       telefone: telefoneApenasNumeros
     };
 
-    if (formData.senha !== formData.confirmarSenha) {
-      alert("As senhas não coincidem!");
-      return;
+    if (!usuarioEditando || alterarSenha) {
+      if (formData.senha !== formData.confirmarSenha) {
+        alert("As senhas não coincidem!");
+        return;
+      }
+
+      if (formData.senha) {
+        dadosParaEnviar.password = formData.senha;
+      }
     }
 
     try {
       if (usuarioEditando) {
-        await api.put(`/users/${usuarioEditando.id}`, dadosParaEnviar, {
+        await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, {
           headers: { Authorization: `Bearer ${token}` }
         });
         alert("Usuário atualizado com sucesso!");
@@ -69,34 +75,22 @@ function LoginAcesso() {
       carregarUsuarios();
       closeModal();
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        console.error("ERRO DE VALIDAÇÃO DA API:", error.response.data);
-      }
       console.error("Erro ao salvar usuário", error);
       alert("Erro ao salvar: " + (error.response?.data?.message || "Verifique os dados no console."));
     }
   };
 
   const handleDelete = async (id) => {
-
-    console.log("ID que chegou para deletar:", id);
-
     if (window.confirm("Deseja realmente excluir este usuário?")) {
       try {
         const token = localStorage.getItem('@Regatec:token');
-
         await api.delete(`users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Access-Control-Allow-Origin': '*',
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
-
         alert("Usuário excluído com sucesso!");
         carregarUsuarios();
       } catch (error) {
         console.error("Erro ao deletar", error);
-        alert("Erro ao excluir: " + (error.response?.data?.message || "Verifique as permissões."));
       }
     }
   };
@@ -107,30 +101,28 @@ function LoginAcesso() {
       nome: usuario.name,
       email: usuario.corporate_email,
       tipo: usuario.type || 'adm',
-      telefone: usuario.telefone || '',
+      telefone: formatarTelefone(usuario.telefone || usuario.phone || ''),
       senha: '',
       confirmarSenha: ''
     });
+    setAlterarSenha(false); 
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setUsuarioEditando(null);
+    setAlterarSenha(false); 
     setFormData({
-      nome: '',
-      email: '',
-      telefone: '',
-      senha: '',
-      confirmarSenha: '',
-      tipo: 'adm'
+      nome: '', email: '', telefone: '',
+      senha: '', confirmarSenha: '', tipo: 'adm'
     });
   };
 
   const formatarTelefone = (value) => {
     if (!value) return "";
-    value = value.replace(/\D/g, ""); 
-    value = value.replace(/(\d{2})(\d)/, "($1) $2"); 
+    value = value.replace(/\D/g, "");
+    value = value.replace(/(\d{2})(\d)/, "($1) $2");
     value = value.replace(/(\d{5})(\d)/, "$1-$2");
     return value.substring(0, 15);
   };
@@ -155,7 +147,7 @@ function LoginAcesso() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(usuarios) && usuarios.map((user) => (
+            {usuarios.map((user) => (
               <tr key={user.id}>
                 <td><span className="colaborador-name">{user.name}</span></td>
                 <td><span className="email-text">{user.corporate_email}</span></td>
@@ -192,6 +184,7 @@ function LoginAcesso() {
                 <label>E-MAIL CORPORATIVO</label>
                 <input
                   type="email" required
+                  autoComplete="off"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -207,23 +200,43 @@ function LoginAcesso() {
                 />
               </div>
 
-              <div className="form-group">
-                <label>SENHA</label>
-                <input
-                  type="password" required={!usuarioEditando}
-                  value={formData.senha}
-                  onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
-                />
-              </div>
+              {(!usuarioEditando || alterarSenha) && (
+                <div className="password-section">
+                  <div className="form-group">
+                    <label>SENHA</label>
+                    <input
+                      type="password"
+                      required={!usuarioEditando || alterarSenha}
+                      autoComplete="new-password"
+                      value={formData.senha}
+                      onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
+                    />
+                  </div>
 
-              <div className="form-group">
-                <label>CONFIRMAR SENHA</label>
-                <input
-                  type="password" required={!usuarioEditando}
-                  value={formData.confirmarSenha}
-                  onChange={(e) => setFormData({ ...formData, confirmarSenha: e.target.value })}
-                />
-              </div>
+                  <div className="form-group">
+                    <label>CONFIRMAR SENHA</label>
+                    <input
+                      type="password"
+                      required={!usuarioEditando || alterarSenha}
+                      autoComplete="new-password"
+                      value={formData.confirmarSenha}
+                      onChange={(e) => setFormData({ ...formData, confirmarSenha: e.target.value })}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {usuarioEditando && (
+                <div className="change-password-trigger">
+                  <button
+                    type="button"
+                    className="btn-toggle-password"
+                    onClick={() => setAlterarSenha(!alterarSenha)}
+                  >
+                     {alterarSenha ? "Cancelar alteração de senha" : "Alterar senha de acesso"}
+                  </button>
+                </div>
+              )}
 
               <div className="form-group">
                 <label>TIPO DE LOGIN</label>

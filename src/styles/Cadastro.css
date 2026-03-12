@@ -266,3 +266,34 @@
   z-index: 9999;
 }
 
+.change-password-trigger {
+  margin-bottom: 15px;
+}
+
+.btn-toggle-password {
+  background: none;
+  border: none;
+  color: var(--secondary-color);
+  font-weight: 900;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.btn-toggle-password:hover {
+  text-decoration: underline;
+}
+
+.password-section {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

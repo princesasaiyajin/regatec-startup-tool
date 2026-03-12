@@ -12,6 +12,7 @@ width: 280px;
   box-sizing: border-box;
 }
 
+
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -48,11 +49,9 @@ width: 280px;
 }
 
 .sidebar-nav {
-  flex: 1; /* Faz o menu ocupar o espaço central disponível */
-  overflow-y: auto; /* Se houver muitos itens, cria um scroll apenas aqui */
+  flex: 1; 
+  overflow-y: auto; 
   margin-bottom: 20px;
-  
-  /* Esconde a barra de scroll para um visual mais limpo (opcional) */
   scrollbar-width: none; 
 }
 
@@ -89,7 +88,7 @@ width: 280px;
 }
 
 .sidebar-footer {
- margin-top: auto; /* Garante que o rodapé "grude" no fim da sidebar */
+ margin-top: auto;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   background-color: #041410

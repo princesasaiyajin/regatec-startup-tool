@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './index.css'; 
+import './index.css';
+import Dashboard from './pages/Dashboard/Dashboard';
 import Login from './pages/Login/Login';
 import Menu from './components/Menu/Menu';
 import CadastroLogin from './pages/CadastroLogin/CadastroLogin';
@@ -11,9 +12,8 @@ import StartupInicial from './pages/StartupInicial/StartupInicial';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeTab, setActiveTab] = useState('logins');
+  const [activeTab, setActiveTab] = useState('dashboard');
 
-  // Esse é o nosso "vigia" que roda ao carregar a página
   useEffect(() => {
     const token = localStorage.getItem('@Regatec:token');
     if (token) {
@@ -26,22 +26,23 @@ function App() {
   };
 
   const handleLogout = () => {
-  localStorage.removeItem('@Regatec:token'); // Remove o token para não entrar direto no F5
-  setIsLoggedIn(false); // Volta para a tela de login
-};
+    localStorage.removeItem('@Regatec:token');
+    setIsLoggedIn(false);
+  };
 
   return (
     <div className="app-container">
       {!isLoggedIn ? (
         <Login onLogin={handleLogin} />
       ) : (
-        
+
         <div style={{ display: 'flex', width: '100vw', minHeight: '100vh' }}>
-          <Menu activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
-          onLogout={handleLogout} />
-          
+          <Menu activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            onLogout={handleLogout} />
+
           <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowX: 'hidden', marginLeft: '280px' }}>
+            {activeTab === 'dashboard' && <Dashboard />}
             {activeTab === 'logins' && <CadastroLogin />}
             {activeTab === 'vendedor' && <CadastroVendedor />}
             {activeTab === 'projetistas' && <CadastroProjetistas />}

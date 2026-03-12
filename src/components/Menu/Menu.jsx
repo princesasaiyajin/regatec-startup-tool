@@ -2,7 +2,8 @@ import './Menu.css';
 import { 
   Building2, Users, Briefcase, Settings, 
   HardHat, GanttChartSquare, Hammer, Phone,
-  Activity, ClipboardCheck, PlusSquare, Share2, LogOut 
+  Activity, ClipboardCheck, PlusSquare, Share2, LogOut,
+  LayoutDashboard 
 } from 'lucide-react';
 
 function Menu({ activeTab, setActiveTab, onLogout }) {
@@ -19,7 +20,16 @@ function Menu({ activeTab, setActiveTab, onLogout }) {
       </div>
 
       <nav className="sidebar-nav">
-        
+        <ul>
+          <li 
+            className={activeTab === 'dashboard' ? 'active' : ''} 
+            onClick={() => setActiveTab('dashboard')}
+            style={{ marginBottom: '10px', fontWeight: 'bold' }}
+          >
+            <LayoutDashboard size={18} /> Dashboard
+          </li>
+        </ul>
+
         <p className="nav-section-title">DADOS CADASTRAIS</p>
         <ul>
           <li className={activeTab === 'logins' ? 'active' : ''} onClick={() => setActiveTab('logins')}>
@@ -38,26 +48,26 @@ function Menu({ activeTab, setActiveTab, onLogout }) {
              <Activity size={16} style={{marginRight: '8px'}} /> OPERACIONAL
            </p>
            <ul>
-        <li 
-    className={activeTab === 'startup' ? 'active' : ''} 
-    onClick={() => setActiveTab('startup')}
-  >
-    <ClipboardCheck size={18} /> Startup Inicial
-  </li>
-  
-  <li 
-    className={activeTab === 'aditivos' ? 'active' : ''} 
-    onClick={() => setActiveTab('aditivos')}
-  >
-    <PlusSquare size={18} /> Aditivos
-  </li>
-  
-  <li 
-    className={activeTab === 'workflow' ? 'active' : ''} 
-    onClick={() => setActiveTab('workflow')}
-  >
-    <Share2 size={18} /> Workflow
-  </li>
+            <li 
+              className={activeTab === 'startup' ? 'active' : ''} 
+              onClick={() => setActiveTab('startup')}
+            >
+              <ClipboardCheck size={18} /> Startup Inicial
+            </li>
+            
+            <li 
+              className={activeTab === 'aditivos' ? 'active' : ''} 
+              onClick={() => setActiveTab('aditivos')}
+            >
+              <PlusSquare size={18} /> Aditivos
+            </li>
+            
+            <li 
+              className={activeTab === 'workflow' ? 'active' : ''} 
+              onClick={() => setActiveTab('workflow')}
+            >
+              <Share2 size={18} /> Workflow
+            </li>
            </ul>
         </div>
       </nav>

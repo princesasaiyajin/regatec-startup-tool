@@ -41,9 +41,9 @@ function CadastroProjetistas () {
   return (
     <div className="content-area">
       <header className="content-header">
-        <h1>LOGINS</h1>
+        <h1>PROJETISTAS</h1>
         <button className="btn-new-user" onClick={() => setIsModalOpen(true)}>
-          <UserPlus size={18} /> NOVO USUÁRIO
+          <UserPlus size={18} /> NOVO PROJETISTA
         </button>
       </header>
 
