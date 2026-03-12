@@ -7,14 +7,14 @@ function LoginAcesso() {
   const [usuarios, setUsuarios] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
-  const [formData, setFormData] = useState({ 
-    nome: '', 
-    email: '', 
-    telefone: '', 
-    senha: '', 
-    confirmarSenha: '', 
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    telefone: '',
+    senha: '',
+    confirmarSenha: '',
     tipo: 'adm'
-   });
+  });
 
   const carregarUsuarios = async () => {
     try {
@@ -34,19 +34,19 @@ function LoginAcesso() {
     carregarUsuarios();
   }, []);
 
- const handleSave = async (e) => {
-  e.preventDefault();
-  const token = localStorage.getItem('@Regatec:token');
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('@Regatec:token');
 
-  const telefoneApenasNumeros = formData.telefone.replace(/\D/g, '');
+    const telefoneApenasNumeros = formData.telefone.replace(/\D/g, '');
 
-  const dadosParaEnviar = {
-    name: formData.nome,             
-    corporate_email: formData.email, 
-    password: formData.senha,        
-    type: formData.tipo,             
-    telefone: telefoneApenasNumeros  
-  };
+    const dadosParaEnviar = {
+      name: formData.nome,
+      corporate_email: formData.email,
+      password: formData.senha,
+      type: formData.tipo,
+      telefone: telefoneApenasNumeros
+    };
 
     if (formData.senha !== formData.confirmarSenha) {
       alert("As senhas não coincidem!");
@@ -63,10 +63,10 @@ function LoginAcesso() {
         await api.post('/users', dadosParaEnviar, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        alert("Usuário cadastrado com sucesso!"); 
+        alert("Usuário cadastrado com sucesso!");
       }
 
-      carregarUsuarios(); 
+      carregarUsuarios();
       closeModal();
     } catch (error) {
       if (error.response && error.response.status === 422) {
@@ -77,34 +77,35 @@ function LoginAcesso() {
     }
   };
 
-const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
 
-  console.log("ID que chegou para deletar:", id); 
+    console.log("ID que chegou para deletar:", id);
 
-  if (window.confirm("Deseja realmente excluir este usuário?")) {
-    try {
-      const token = localStorage.getItem('@Regatec:token');
-  
-      await api.delete(`users/${id}`, {
-        headers: { Authorization: `Bearer ${token}`,
-          'Access-Control-Allow-Origin': '*',
-         }
-      });
+    if (window.confirm("Deseja realmente excluir este usuário?")) {
+      try {
+        const token = localStorage.getItem('@Regatec:token');
 
-      alert("Usuário excluído com sucesso!");
-      carregarUsuarios(); 
-    } catch (error) {
-      console.error("Erro ao deletar", error);
-      alert("Erro ao excluir: " + (error.response?.data?.message || "Verifique as permissões."));
+        await api.delete(`users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Access-Control-Allow-Origin': '*',
+          }
+        });
+
+        alert("Usuário excluído com sucesso!");
+        carregarUsuarios();
+      } catch (error) {
+        console.error("Erro ao deletar", error);
+        alert("Erro ao excluir: " + (error.response?.data?.message || "Verifique as permissões."));
+      }
     }
-  }
-};
+  };
 
   const openEditModal = (usuario) => {
     setUsuarioEditando(usuario);
-    setFormData({ 
-      nome: usuario.name, 
-      email: usuario.corporate_email, 
+    setFormData({
+      nome: usuario.name,
+      email: usuario.corporate_email,
       tipo: usuario.type || 'adm',
       telefone: usuario.telefone || '',
       senha: '',
@@ -116,21 +117,29 @@ const handleDelete = async (id) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setUsuarioEditando(null);
-    setFormData({ 
-      nome: '', 
-      email: '', 
-      telefone: '', 
-      senha: '', 
-      confirmarSenha: '', 
-      tipo: 'adm' 
+    setFormData({
+      nome: '',
+      email: '',
+      telefone: '',
+      senha: '',
+      confirmarSenha: '',
+      tipo: 'adm'
     });
+  };
+
+  const formatarTelefone = (value) => {
+    if (!value) return "";
+    value = value.replace(/\D/g, ""); 
+    value = value.replace(/(\d{2})(\d)/, "($1) $2"); 
+    value = value.replace(/(\d{5})(\d)/, "$1-$2");
+    return value.substring(0, 15);
   };
 
   return (
     <div className="content-area">
       <header className="content-header">
         <h1>LOGINS</h1>
-        <button className="btn-new-user" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-new-user" onClick={() => { closeModal(); setIsModalOpen(true); }}>
           <UserPlus size={18} /> NOVO USUÁRIO
         </button>
       </header>
@@ -141,7 +150,7 @@ const handleDelete = async (id) => {
             <tr>
               <th>COLABORADOR</th>
               <th>E-MAIL</th>
-              <th>TIPO DE LOGIN</th> 
+              <th>TIPO DE LOGIN</th>
               <th className="actions-header">AÇÕES</th>
             </tr>
           </thead>
@@ -172,59 +181,60 @@ const handleDelete = async (id) => {
             <form onSubmit={handleSave}>
               <div className="form-group">
                 <label>NOME DO COLABORADOR</label>
-                <input 
+                <input
                   type="text" required
                   value={formData.nome}
-                  onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                 />
               </div>
 
               <div className="form-group">
                 <label>E-MAIL CORPORATIVO</label>
-                <input 
+                <input
                   type="email" required
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
 
               <div className="form-group">
                 <label>TELEFONE</label>
-                <input 
+                <input
                   type="tel" required
+                  placeholder="(00) 00000-0000"
                   value={formData.telefone}
-                  onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, telefone: formatarTelefone(e.target.value) })}
                 />
               </div>
 
               <div className="form-group">
                 <label>SENHA</label>
-                <input 
+                <input
                   type="password" required={!usuarioEditando}
                   value={formData.senha}
-                  onChange={(e) => setFormData({...formData, senha: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
                 />
               </div>
 
               <div className="form-group">
                 <label>CONFIRMAR SENHA</label>
-                <input 
+                <input
                   type="password" required={!usuarioEditando}
                   value={formData.confirmarSenha}
-                  onChange={(e) => setFormData({...formData, confirmarSenha: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, confirmarSenha: e.target.value })}
                 />
               </div>
 
               <div className="form-group">
                 <label>TIPO DE LOGIN</label>
-                <select 
+                <select
                   className="modal-select"
                   value={formData.tipo}
-                  onChange={(e) => setFormData({...formData, tipo: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
                 >
-                <option value="adm">Administrativo</option>
-                <option value="editor">Editor</option>
-                <option value="viewer">Visualizador</option>
+                  <option value="adm">Administrativo</option>
+                  <option value="editor">Editor</option>
+                  <option value="viewer">Visualizador</option>
                 </select>
               </div>
 

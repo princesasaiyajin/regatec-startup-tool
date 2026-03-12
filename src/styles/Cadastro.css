@@ -95,7 +95,6 @@
 .icon-edit { color: variavel(--secondary-color); cursor: pointer; }
 .icon-delete { color:  var(--color-destructive); cursor: pointer; }
 
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -110,15 +109,16 @@
   z-index: 1000;
 }
 
-
 .modal-container {
   background: white;
-  width: 550px;
-  max-width: 90%;
-  border-radius: 40px; 
-  padding: 40px;
+  width: 500px; 
+  max-width: 95%;
+  max-height: 85vh; 
+  border-radius: 30px; 
+  padding: 25px 35px; 
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   animation: modalIn 0.3s ease-out;
+  overflow-y: auto; 
 }
 
 @keyframes modalIn {
@@ -130,7 +130,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .modal-header h2 {
@@ -150,26 +150,25 @@
 .close-button:hover { color: var(--color-destructive); }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   display: flex;
   flex-direction: column;
 }
 
 .form-group label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 900;
   color: #64748b;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .form-group input, .modal-select {
-  padding: 14px;
+  padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
   font-size: 14px;
 }
-
 
 .permissions-area {
   background: #f1f5f9;
@@ -196,9 +195,8 @@
   cursor: pointer;
 }
 
-
 .modal-footer {
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
   gap: 15px;
@@ -223,7 +221,6 @@
   box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
 }
 
-
 .data-table th {
   text-align: left;
   padding: 20px 30px;
@@ -241,7 +238,6 @@
   font-weight: 900;
   text-transform: uppercase;
 }
-
 
 .actions-header {
   text-align: center !important;
