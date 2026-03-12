@@ -2,12 +2,10 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background-color: #ffffff; 
-  background-image: radial-gradient(
-    circle at center,
-    rgba(16, 185, 129, 0.07) 0%,   
-    rgba(255, 255, 255, 0) 70%     
-  );
+  background-color: #ffffff;
+  background-image: radial-gradient(circle at center,
+      rgba(16, 185, 129, 0.07) 0%,
+      rgba(255, 255, 255, 0) 70%);
 
   display: flex;
   justify-content: center;
@@ -22,16 +20,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent; 
+  background-color: transparent;
 }
 
 .login-card {
   background: #ffffff;
   padding: 60px 50px;
-  border-radius: 56px; 
-  box-shadow: 
+  border-radius: 56px;
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.08),
-    0 0 30px rgba(16, 185, 129, 0.04); 
+    0 0 30px rgba(16, 185, 129, 0.04);
   width: 550px;
   max-width: 90vw;
   text-align: center;
@@ -43,27 +41,27 @@
 .logo-area {
   position: relative;
   margin-bottom: 30px;
-  display: flex;      
+  display: flex;
   justify-content: center;
 }
 
 .login-logo-img {
-  width: 35%; 
-  height: auto;       
+  width: 60px;
+  height: auto;
   object-fit: contain;
-  z-index: 2;         
+  z-index: 2;
 }
 
 .logo-glow {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 70%;
+  left: 70%;
   transform: translate(-50%, -50%);
   width: 120px;
   height: 120px;
-  background-color: var(--secondary-color); 
-  filter: blur(40px); 
-  opacity: 0.15;       
+  background-color: var(--secondary-color);
+  filter: blur(40px);
+  opacity: 0.15;
   border-radius: 50%;
 }
 
@@ -81,7 +79,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 40px;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .line {
@@ -91,7 +89,7 @@
 }
 
 .startup-text {
-  color: var(--secondary-color); 
+  color: var(--secondary-color);
   font-size: 13px;
   font-weight: 900;
   text-transform: uppercase;
@@ -110,7 +108,7 @@
 .input-group label {
   font-size: 11px;
   font-weight: 900;
-  color: #64748b; 
+  color: #64748b;
   display: block;
   margin-bottom: 8px;
   letter-spacing: 0.05em;
@@ -127,7 +125,7 @@
   padding: 18px 20px 18px 52px;
   border: 1px solid #f1f5f9;
   border-radius: 16px;
-  background-color: #f8fafc; 
+  background-color: #f8fafc;
   font-size: 15px;
   color: #333;
   outline: none;
@@ -149,7 +147,7 @@
 .btn-access {
   width: 100%;
   padding: 20px;
-  background-color: var(--secondary-color); 
+  background-color: var(--secondary-color);
   color: #ffffff;
   border: none;
   border-radius: 20px;
@@ -163,8 +161,8 @@
 }
 
 .btn-access:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
 }
 
 .btn-access:active {

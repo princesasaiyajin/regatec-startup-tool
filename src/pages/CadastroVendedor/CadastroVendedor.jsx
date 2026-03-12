@@ -7,15 +7,12 @@ function CadastroVendedor() {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
-  
-  // Ajustado para os campos da API: name e phone
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
 
   const fetchVendedores = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('@Regatec:token');
-      // Rota correta conforme Postman: /api/sellers
       const response = await fetch('https://regatec.api.etetis.com.br/api/sellers', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -36,7 +33,6 @@ function CadastroVendedor() {
     e.preventDefault();
     const token = localStorage.getItem('@Regatec:token');
     
-    // Rota para editar ou criar baseada na imagem do Postman
     const url = usuarioEditando 
       ? `https://regatec.api.etetis.com.br/api/sellers/${usuarioEditando.id}`
       : 'https://regatec.api.etetis.com.br/api/sellers';
@@ -50,7 +46,7 @@ function CadastroVendedor() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData), // Envia name, email e phone
+        body: JSON.stringify(formData), 
       });
 
       if (response.ok) {
@@ -79,7 +75,6 @@ function CadastroVendedor() {
 
   const openEditModal = (vendedor) => {
     setUsuarioEditando(vendedor);
-    // Mapeia os dados da API para o formulário
     setFormData({ name: vendedor.name, email: vendedor.email, phone: vendedor.phone });
     setIsModalOpen(true);
   };
