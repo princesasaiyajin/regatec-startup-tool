@@ -40,8 +40,6 @@ function CadastroVendedor() {
       const result = await response.json();
       console.log("DADOS RECEBIDOS DA API:", result);
 
-      // CORREÇÃO AQUI: Baseado na imagem image_77345e.png
-      // A estrutura é result -> data -> sellers
       if (result && result.data && Array.isArray(result.data.sellers)) {
         setVendedores(result.data.sellers);
       } else if (Array.isArray(result.sellers)) {
@@ -89,7 +87,6 @@ const handleSave = async (e) => {
       body: JSON.stringify(dadosParaEnviar)
     });
 
-    // 1. VERIFICA SE A RESPOSTA É JSON ANTES DE CONVERTER
     const contentType = response.headers.get("content-type");
     let errorData = null;
 
@@ -102,12 +99,10 @@ const handleSave = async (e) => {
       fetchVendedores();
       closeModal();
     } else {
-      // 2. TRATA ERROS SEM QUEBRAR O JS
       console.error("Erro da API:", errorData);
       alert(`Erro ${response.status}: ${errorData?.message || "O servidor negou a requisição (CORS ou Rota inexistente)."}`);
     }
   } catch (error) {
-    // 3. CAPTURA ERROS DE REDE (COMO O BLOQUEIO DE CORS)
     console.error("Erro na requisição:", error);
     alert("Não foi possível conectar ao servidor. Verifique o console para detalhes de CORS.");
   }

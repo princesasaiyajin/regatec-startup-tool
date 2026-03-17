@@ -11,7 +11,7 @@ function LoginAcesso() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
-    telefone: '', // Usamos 'telefone' para o input e máscara
+    telefone: '', 
     senha: '',
     confirmarSenha: '',
     tipo: 'adm'
@@ -23,7 +23,6 @@ function LoginAcesso() {
       const response = await api.get('/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // Tenta pegar a lista de usuários de diferentes estruturas possíveis da API
       const listaDeUsuarios = response.data.data?.users || response.data?.data || response.data || [];
       setUsuarios(Array.isArray(listaDeUsuarios) ? listaDeUsuarios : []);
     } catch (error) {
@@ -50,7 +49,6 @@ const handleSave = async (e) => {
 
   try {
     if (usuarioEditando) {
-      // Se o erro de PATCH persistir, tente mudar para .post aqui só para testar
       await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -65,7 +63,6 @@ const handleSave = async (e) => {
     closeModal();
   } catch (error) {
     console.error("ERRO DE REDE:", error);
-    // Isso vai te mostrar se o erro é CORS ou se o ID não foi encontrado
     alert("Erro ao salvar: " + (error.response?.status === 405 ? "Método PATCH não permitido no servidor" : "Verifique o console"));
   }
 };
@@ -92,7 +89,6 @@ const handleSave = async (e) => {
       nome: usuario.name || '',
       email: usuario.corporate_email || '',
       tipo: usuario.type || 'adm',
-      // Tenta pegar o telefone das duas chaves possíveis da API
       telefone: formatarTelefone(usuario.phone || usuario.telefone || ''),
       senha: '',
       confirmarSenha: ''
