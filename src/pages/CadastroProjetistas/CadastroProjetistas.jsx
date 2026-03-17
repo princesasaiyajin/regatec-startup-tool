@@ -13,7 +13,6 @@ function CadastroProjetistas() {
     telefone: ''
   });
 
-  // URL vinda do seu Postman
   const API_URL = 'https://regatec.api.etetis.com.br/api/designers';
 
   const formatarTelefone = (valor) => {
@@ -39,8 +38,7 @@ function CadastroProjetistas() {
       });
 
       const result = await response.json();
-      
-      // Mapeamento dinâmico: tenta achar a lista de projetistas no JSON
+        
       const lista = result.data?.designers || result.designers || result.data || [];
       setProjetistas(Array.isArray(lista) ? lista : []);
     } catch (error) {

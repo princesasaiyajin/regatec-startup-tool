@@ -1,60 +1,59 @@
 import React, { useState } from 'react';
 import { UserPlus, Edit3, Trash2, X } from 'lucide-react'; 
-import '../../styles/Cadastro.css'; // Usando o CSS global para manter tudo igual
+import '../../styles/Cadastro.css'; // Usando o seu CSS global de cadastros
 
-function TiposDeContato() {
+function TiposDeObra() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [contatoEditando, setContatoEditando] = useState(null);
+  const [tipoEditando, setTipoEditando] = useState(null);
   const [formData, setFormData] = useState({ nome: '' });
   
-  const [departamentos, setDepartamentos] = useState([
-    { id: 1, nome: 'Financeiro' },
-    { id: 2, nome: 'Compras' },
-    { id: 3, nome: 'Diretoria' }
+  // Dados mockados iniciais
+  const [tiposDeObras, setTiposDeObras] = useState([
+    { id: 1, nome: 'Residencial' },
+    { id: 2, nome: 'Comercial' },
+    { id: 3, nome: 'Industrial' }
   ]);
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (contatoEditando) {
-  
-      setDepartamentos(departamentos.map(d => 
-        d.id === contatoEditando.id ? { ...d, nome: formData.nome } : d
-      ));
+    if (tipoEditando) {
+      // Lógica de Edição
+      setTiposDeObras(tiposDeObras.map(t => t.id === tipoEditando.id ? { ...t, nome: formData.nome } : t));
     } else {
-  
-      const novoDepto = {
+      // Lógica de Novo Cadastro
+      const novoTipo = {
         id: Date.now(),
         nome: formData.nome
       };
-      setDepartamentos([...departamentos, novoDepto]);
+      setTiposDeObras([...tiposDeObras, novoTipo]);
     }
     closeModal();
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Deseja realmente excluir este tipo de contato?")) {
-      setDepartamentos(departamentos.filter(d => d.id !== id));
+    if (window.confirm("Deseja realmente excluir este tipo de obra?")) {
+      setTiposDeObras(tiposDeObras.filter(t => t.id !== id));
     }
   };
 
-  const openEditModal = (depto) => {
-    setContatoEditando(depto);
-    setFormData({ nome: depto.nome });
+  const openEditModal = (tipo) => {
+    setTipoEditando(tipo);
+    setFormData({ nome: tipo.nome });
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setContatoEditando(null);
+    setTipoEditando(null);
     setFormData({ nome: '' });
   };
 
   return (
     <div className="content-area">
       <header className="content-header">
-        <h1>TIPOS DE CONTATO</h1>
+        <h1>TIPOS DE OBRAS</h1>
         <button className="btn-new-user" onClick={() => setIsModalOpen(true)}>
-          <UserPlus size={18} /> NOVO TIPO DE CONTATO
+          <UserPlus size={18} /> NOVO TIPO DE OBRA
         </button>
       </header>
 
@@ -62,26 +61,26 @@ function TiposDeContato() {
         <table className="data-table">
           <thead>
             <tr>
-              <th>DEPARTAMENTO / SETOR</th>
+              <th>DESCRIÇÃO DO TIPO DE OBRA</th>
               <th className="actions-header">AÇÕES</th>
             </tr>
           </thead>
           <tbody>
-            {departamentos.length === 0 ? (
+            {tiposDeObras.length === 0 ? (
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
-                  Nenhum tipo de contato registrado.
+                  Nenhum tipo de obra registrado.
                 </td>
               </tr>
             ) : (
-              departamentos.map((depto) => (
-                <tr key={depto.id}>
+              tiposDeObras.map((tipo) => (
+                <tr key={tipo.id}>
                   <td>
-                    <span className="colaborador-name">{depto.nome}</span>
+                    <span className="colaborador-name">{tipo.nome}</span>
                   </td>
                   <td className="actions-cell">
-                    <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(depto)} />
-                    <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(depto.id)} />
+                    <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(tipo)} />
+                    <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(tipo.id)} />
                   </td>
                 </tr>
               ))
@@ -90,21 +89,22 @@ function TiposDeContato() {
         </table>
       </div>
 
+      {/* MODAL PADRONIZADO */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-container">
             <header className="modal-header">
-              <h2>{contatoEditando ? 'EDITAR CONTATO' : 'NOVO TIPO DE CONTATO'}</h2>
+              <h2>{tipoEditando ? 'EDITAR TIPO DE OBRA' : 'NOVO TIPO DE OBRA'}</h2>
               <button className="close-button" onClick={closeModal}><X size={24} /></button>
             </header>
 
             <form onSubmit={handleSave}>
               <div className="form-group">
-                <label>NOME DO DEPARTAMENTO / SETOR</label>
+                <label>NOME DO TIPO DE OBRA</label>
                 <input 
                   type="text" 
                   required 
-                  placeholder="Ex: Comercial, Suporte, RH..."
+                  placeholder="Ex: Industrial, Comercial..."
                   value={formData.nome}
                   onChange={(e) => setFormData({ nome: e.target.value })}
                 />
@@ -113,7 +113,7 @@ function TiposDeContato() {
               <footer className="modal-footer">
                 <button type="button" className="btn-cancel" onClick={closeModal}>CANCELAR</button>
                 <button type="submit" className="btn-save">
-                  {contatoEditando ? 'ATUALIZAR' : 'SALVAR'}
+                  {tipoEditando ? 'ATUALIZAR' : 'SALVAR'}
                 </button>
               </footer>
             </form>
@@ -124,4 +124,4 @@ function TiposDeContato() {
   );
 }
 
-export default TiposDeContato;
+export default TiposDeObra;

@@ -6,6 +6,9 @@ import Menu from './components/Menu/Menu';
 import CadastroLogin from './pages/CadastroLogin/CadastroLogin';
 import CadastroVendedor from './pages/CadastroVendedor/CadastroVendedor';
 import CadastroProjetistas from './pages/CadastroProjetistas/CadastroProjetistas';
+import TiposDeObra from './pages/TiposDeObra/TiposDeObra';
+import FasesDoProjeto from './pages/FasesDoProjeto/FasesDoProjeto';
+import FasesDaObra from './pages/FasesDaObra/FasesDaObra';
 import TiposDeContato from './pages/TiposDeContato/TiposDeContato';
 import StartupInicial from './pages/StartupInicial/StartupInicial';
 
@@ -46,6 +49,9 @@ function App() {
             {activeTab === 'logins' && <CadastroLogin />}
             {activeTab === 'vendedor' && <CadastroVendedor />}
             {activeTab === 'projetistas' && <CadastroProjetistas />}
+            {activeTab === 'tipos-obra' && <TiposDeObra />}
+            {activeTab === 'fases-projeto' && <FasesDoProjeto />}
+            {activeTab === 'fases-obra' && <FasesDaObra />}
             {activeTab === 'startup' && <StartupInicial />}
             {activeTab === 'tipos-contato' && <TiposDeContato />}
           </main>

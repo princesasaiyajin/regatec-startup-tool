@@ -37,7 +37,7 @@ function Menu({ activeTab, setActiveTab, onLogout }) {
           </li>
           <li onClick={() => setActiveTab('vendedor')} ><Briefcase size={18} /> Vendedor</li>
           <li onClick={() => setActiveTab('projetistas')}><Settings size={18} /> Projetistas</li>
-          <li onClick={() => setActiveTab('dados-obra')}><HardHat size={18} /> Dados da Obra</li>
+          <li onClick={() => setActiveTab('tipos-obra')}><HardHat size={18} /> Tipos de Obra</li>
           <li onClick={() => setActiveTab('fases-projeto')}><GanttChartSquare size={18} /> Fases do Projeto</li>
           <li onClick={() => setActiveTab('fases-obra')}><Hammer size={18} /> Fases da Obra</li>
           <li onClick={() => setActiveTab('tipos-contato')}><Phone size={18} /> Tipo do Contato</li>
