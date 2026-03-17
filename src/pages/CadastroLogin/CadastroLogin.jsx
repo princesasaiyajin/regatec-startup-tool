@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import '../../styles/Cadastro.css';
-import { UserPlus, Edit3, Trash2, X, Key } from 'lucide-react';
+import { UserPlus, Edit3, Trash2, X } from 'lucide-react';
 
 function LoginAcesso() {
   const [usuarios, setUsuarios] = useState([]);
@@ -11,7 +11,7 @@ function LoginAcesso() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
-    telefone: '',
+    telefone: '', // Usamos 'telefone' para o input e máscara
     senha: '',
     confirmarSenha: '',
     tipo: 'adm'
@@ -23,7 +23,8 @@ function LoginAcesso() {
       const response = await api.get('/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const listaDeUsuarios = response.data.data.users || response.data || [];
+      // Tenta pegar a lista de usuários de diferentes estruturas possíveis da API
+      const listaDeUsuarios = response.data.data?.users || response.data?.data || response.data || [];
       setUsuarios(Array.isArray(listaDeUsuarios) ? listaDeUsuarios : []);
     } catch (error) {
       console.error("Erro ao carregar usuários", error);
@@ -35,50 +36,39 @@ function LoginAcesso() {
     carregarUsuarios();
   }, []);
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('@Regatec:token');
+const handleSave = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem('@Regatec:token');
+  const telefoneLimpo = formData.telefone ? formData.telefone.replace(/\D/g, '') : "";
 
-    const telefoneApenasNumeros = formData.telefone.replace(/\D/g, '');
-
-    const dadosParaEnviar = {
-      name: formData.nome,
-      corporate_email: formData.email,
-      type: formData.tipo,
-      telefone: telefoneApenasNumeros
-    };
-
-    if (!usuarioEditando || alterarSenha) {
-      if (formData.senha !== formData.confirmarSenha) {
-        alert("As senhas não coincidem!");
-        return;
-      }
-
-      if (formData.senha) {
-        dadosParaEnviar.password = formData.senha;
-      }
-    }
-
-    try {
-      if (usuarioEditando) {
-        await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        alert("Usuário atualizado com sucesso!");
-      } else {
-        await api.post('/users', dadosParaEnviar, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        alert("Usuário cadastrado com sucesso!");
-      }
-
-      carregarUsuarios();
-      closeModal();
-    } catch (error) {
-      console.error("Erro ao salvar usuário", error);
-      alert("Erro ao salvar: " + (error.response?.data?.message || "Verifique os dados no console."));
-    }
+  const dadosParaEnviar = {
+    name: formData.nome,
+    corporate_email: formData.email,
+    type: formData.tipo,
+    phone: telefoneLimpo 
   };
+
+  try {
+    if (usuarioEditando) {
+      // Se o erro de PATCH persistir, tente mudar para .post aqui só para testar
+      await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert("Atualizado com sucesso!");
+    } else {
+      await api.post('/users', dadosParaEnviar, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert("Cadastrado com sucesso!");
+    }
+    carregarUsuarios();
+    closeModal();
+  } catch (error) {
+    console.error("ERRO DE REDE:", error);
+    // Isso vai te mostrar se o erro é CORS ou se o ID não foi encontrado
+    alert("Erro ao salvar: " + (error.response?.status === 405 ? "Método PATCH não permitido no servidor" : "Verifique o console"));
+  }
+};
 
   const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir este usuário?")) {
@@ -91,6 +81,7 @@ function LoginAcesso() {
         carregarUsuarios();
       } catch (error) {
         console.error("Erro ao deletar", error);
+        alert("Erro ao excluir usuário.");
       }
     }
   };
@@ -98,10 +89,11 @@ function LoginAcesso() {
   const openEditModal = (usuario) => {
     setUsuarioEditando(usuario);
     setFormData({
-      nome: usuario.name,
-      email: usuario.corporate_email,
+      nome: usuario.name || '',
+      email: usuario.corporate_email || '',
       tipo: usuario.type || 'adm',
-      telefone: formatarTelefone(usuario.telefone || usuario.phone || ''),
+      // Tenta pegar o telefone das duas chaves possíveis da API
+      telefone: formatarTelefone(usuario.phone || usuario.telefone || ''),
       senha: '',
       confirmarSenha: ''
     });
@@ -147,17 +139,23 @@ function LoginAcesso() {
             </tr>
           </thead>
           <tbody>
-            {usuarios.map((user) => (
-              <tr key={user.id}>
-                <td><span className="colaborador-name">{user.name}</span></td>
-                <td><span className="email-text">{user.corporate_email}</span></td>
-                <td><span className="tipo-badge">{user.type}</span></td>
-                <td className="actions-cell">
-                  <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(user)} />
-                  <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(user.id)} />
-                </td>
+            {usuarios.length > 0 ? (
+              usuarios.map((user) => (
+                <tr key={user.id}>
+                  <td><span className="colaborador-name">{user.name}</span></td>
+                  <td><span className="email-text">{user.corporate_email}</span></td>
+                  <td><span className="tipo-badge">{user.type}</span></td>
+                  <td className="actions-cell">
+                    <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(user)} />
+                    <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(user.id)} />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>Nenhum usuário encontrado.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
