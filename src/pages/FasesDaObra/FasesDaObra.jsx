@@ -1,45 +1,102 @@
-import React, { useState } from 'react';
-import { UserPlus, Edit3, Trash2, X } from 'lucide-react'; 
+import React, { useState, useEffect } from 'react';
+import { UserPlus, Edit3, Trash2, X, Loader2 } from 'lucide-react'; 
 import '../../styles/Cadastro.css'; 
 
 function FasesDaObra() {
+  const [fasesObra, setFasesObra] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [faseEditando, setFaseEditando] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ nome: '' });
-  
-  const [fasesObra, setFasesObra] = useState([
-    { id: 1, nome: 'Pré-executivo' },
-    { id: 2, nome: 'Projeto executivo' },
-    { id: 3, nome: 'Liberado para a Obra' }
-  ]);
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (faseEditando) {
-   
-      setFasesObra(fasesObra.map(f => 
-        f.id === faseEditando.id ? { ...f, nome: formData.nome } : f
-      ));
-    } else {
-     
-      const novaFase = {
-        id: Date.now(),
-        nome: formData.nome
-      };
-      setFasesObra([...fasesObra, novaFase]);
+  const API_URL = 'https://regatec.api.etetis.com.br/api/work-phases';
+
+  const fetchFases = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('@Regatec:token');
+      const response = await fetch(`${API_URL}?page=1&limit=100`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
+      const result = await response.json();
+  
+      const lista = result.data?.work_phases || result.work_phases || result.data || [];
+      setFasesObra(Array.isArray(lista) ? lista : []);
+    } catch (error) {
+      console.error("Erro ao carregar fases da obra:", error);
+      setFasesObra([]);
+    } finally {
+      setLoading(false);
     }
-    closeModal();
   };
 
-  const handleDelete = (id) => {
+  useEffect(() => {
+    fetchFases();
+  }, []);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('@Regatec:token');
+
+    const dadosParaEnviar = {
+      name: formData.nome
+    };
+
+    try {
+      const url = faseEditando ? `${API_URL}/${faseEditando.id}` : API_URL;
+      const method = faseEditando ? 'PATCH' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dadosParaEnviar)
+      });
+
+      if (response.ok) {
+        alert(faseEditando ? "Fase da obra atualizada!" : "Fase da obra cadastrada!");
+        fetchFases();
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        alert(`Erro: ${errorData?.message || "Erro na operação"}`);
+      }
+    } catch (error) {
+      alert("Erro de conexão com o servidor.");
+    }
+  };
+
+  const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir esta fase da obra?")) {
-      setFasesObra(fasesObra.filter(f => f.id !== id));
+      try {
+        const token = localStorage.getItem('@Regatec:token');
+        const response = await fetch(`${API_URL}/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+          fetchFases();
+        }
+      } catch (error) {
+        console.error("Erro ao deletar:", error);
+      }
     }
   };
 
   const openEditModal = (fase) => {
     setFaseEditando(fase);
-    setFormData({ nome: fase.nome });
+    setFormData({ nome: fase.name || fase.nome });
     setIsModalOpen(true);
   };
 
@@ -53,7 +110,7 @@ function FasesDaObra() {
     <div className="content-area">
       <header className="content-header">
         <h1>FASES DA OBRA</h1>
-        <button className="btn-new-user" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-new-user" onClick={() => { closeModal(); setIsModalOpen(true); }}>
           <UserPlus size={18} /> NOVA FASE DE OBRA
         </button>
       </header>
@@ -67,7 +124,13 @@ function FasesDaObra() {
             </tr>
           </thead>
           <tbody>
-            {fasesObra.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
+                  <Loader2 className="animate-spin" style={{ margin: '0 auto' }} />
+                </td>
+              </tr>
+            ) : fasesObra.length === 0 ? (
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
                   Nenhuma fase de obra registrada.
@@ -77,7 +140,7 @@ function FasesDaObra() {
               fasesObra.map((fase) => (
                 <tr key={fase.id}>
                   <td>
-                    <span className="colaborador-name">{fase.nome}</span>
+                    <span className="colaborador-name">{fase.name || fase.nome}</span>
                   </td>
                   <td className="actions-cell">
                     <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(fase)} />

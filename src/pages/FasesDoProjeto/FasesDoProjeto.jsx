@@ -1,43 +1,98 @@
-import React, { useState } from 'react';
-import { UserPlus, Edit3, Trash2, X } from 'lucide-react'; 
+import React, { useState, useEffect } from 'react';
+import { UserPlus, Edit3, Trash2, X, Loader2 } from 'lucide-react'; 
 import '../../styles/Cadastro.css';
 
 function FasesDoProjeto() {
+  const [fases, setFases] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [faseEditando, setFaseEditando] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ nome: '' });
-  
-  const [fases, setFases] = useState([
-    { id: 1, nome: 'Levantamento' },
-    { id: 2, nome: 'Anteprojeto' },
-    { id: 3, nome: 'Executivo' }
-  ]);
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (faseEditando) {
+  const API_URL = 'https://regatec.api.etetis.com.br/api/project-phases';
+
+  const fetchFases = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('@Regatec:token');
+     const response = await fetch(API_URL, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await response.json();
     
-      setFases(fases.map(f => f.id === faseEditando.id ? { ...f, nome: formData.nome } : f));
-    } else {
-     
-      const novaFase = {
-        id: Date.now(),
-        nome: formData.nome
-      };
-      setFases([...fases, novaFase]);
+      const lista = result.data?.project_phases || result.project_phases || result.data || [];
+      setFases(Array.isArray(lista) ? lista : []);
+    } catch (error) {
+      console.error("Erro ao carregar fases:", error);
+      setFases([]);
+    } finally {
+      setLoading(false);
     }
-    closeModal();
   };
 
-  const handleDelete = (id) => {
+  useEffect(() => {
+    fetchFases();
+  }, []);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('@Regatec:token');
+
+    const dadosParaEnviar = {
+      name: formData.nome
+    };
+
+    try {
+      const url = faseEditando ? `${API_URL}/${faseEditando.id}` : API_URL;
+      const method = faseEditando ? 'PATCH' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dadosParaEnviar)
+      });
+
+      if (response.ok) {
+        alert(faseEditando ? "Fase atualizada com sucesso!" : "Nova fase cadastrada!");
+        fetchFases();
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        alert(`Erro: ${errorData?.message || "Erro na operação"}`);
+      }
+    } catch (error) {
+      alert("Erro de conexão com o servidor.");
+    }
+  };
+
+  const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir esta fase do projeto?")) {
-      setFases(fases.filter(f => f.id !== id));
+      try {
+        const token = localStorage.getItem('@Regatec:token');
+        await fetch(`${API_URL}/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        fetchFases();
+      } catch (error) {
+        console.error("Erro ao deletar:", error);
+      }
     }
   };
 
   const openEditModal = (fase) => {
     setFaseEditando(fase);
-    setFormData({ nome: fase.nome });
+    setFormData({ nome: fase.name || fase.nome });
     setIsModalOpen(true);
   };
 
@@ -65,7 +120,13 @@ function FasesDoProjeto() {
             </tr>
           </thead>
           <tbody>
-            {fases.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
+                  <Loader2 className="animate-spin" style={{ margin: '0 auto' }} />
+                </td>
+              </tr>
+            ) : fases.length === 0 ? (
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
                   Nenhuma fase registrada.
@@ -75,7 +136,7 @@ function FasesDoProjeto() {
               fases.map((fase) => (
                 <tr key={fase.id}>
                   <td>
-                    <span className="colaborador-name">{fase.nome}</span>
+                    <span className="colaborador-name">{fase.name || fase.nome}</span>
                   </td>
                   <td className="actions-cell">
                     <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(fase)} />

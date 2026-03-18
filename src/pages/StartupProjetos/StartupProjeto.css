@@ -378,3 +378,14 @@
         padding: 1rem;
     }
 }
+
+.form-section-container.form-full-width {
+  display: flex !important;
+  flex-direction: column !important; /* Força o cabeçalho em cima e o corpo embaixo */
+}
+
+.form-section-container.form-full-width .card-header,
+.form-section-container.form-full-width .card-body {
+  width: 100% !important;
+  flex: none !important;
+}

@@ -1,45 +1,100 @@
-import React, { useState } from 'react';
-import { UserPlus, Edit3, Trash2, X } from 'lucide-react'; 
-import '../../styles/Cadastro.css'; // Usando o CSS global para manter tudo igual
+import React, { useState, useEffect } from 'react';
+import { UserPlus, Edit3, Trash2, X, Loader2 } from 'lucide-react'; 
+import '../../styles/Cadastro.css'; 
 
 function TiposDeContato() {
+  const [tiposContato, setTiposContato] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [contatoEditando, setContatoEditando] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ nome: '' });
-  
-  const [departamentos, setDepartamentos] = useState([
-    { id: 1, nome: 'Financeiro' },
-    { id: 2, nome: 'Compras' },
-    { id: 3, nome: 'Diretoria' }
-  ]);
 
-  const handleSave = (e) => {
+  const API_URL = 'https://regatec.api.etetis.com.br/api/contact-types';
+  const fetchTipos = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('@Regatec:token');
+      const response = await fetch(`${API_URL}?page=1&limit=100`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
+      const result = await response.json();
+      const lista = result.data?.contact_types || result.contact_types || result.data || [];
+      setTiposContato(Array.isArray(lista) ? lista : []);
+    } catch (error) {
+      console.error("Erro ao carregar tipos de contato:", error);
+      setTiposContato([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTipos();
+  }, []);
+
+  const handleSave = async (e) => {
     e.preventDefault();
-    if (contatoEditando) {
-  
-      setDepartamentos(departamentos.map(d => 
-        d.id === contatoEditando.id ? { ...d, nome: formData.nome } : d
-      ));
-    } else {
-  
-      const novoDepto = {
-        id: Date.now(),
-        nome: formData.nome
-      };
-      setDepartamentos([...departamentos, novoDepto]);
+    const token = localStorage.getItem('@Regatec:token');
+
+    const dadosParaEnviar = {
+      name: formData.nome
+    };
+
+    try {
+      const url = contatoEditando ? `${API_URL}/${contatoEditando.id}` : API_URL;
+      const method = contatoEditando ? 'PATCH' : 'POST';
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dadosParaEnviar)
+      });
+
+      if (response.ok) {
+        alert(contatoEditando ? "Tipo de contato atualizado!" : "Tipo de contato cadastrado!");
+        fetchTipos();
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        alert(`Erro: ${errorData?.message || "Erro na operação"}`);
+      }
+    } catch (error) {
+      alert("Erro de conexão com o servidor.");
     }
-    closeModal();
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir este tipo de contato?")) {
-      setDepartamentos(departamentos.filter(d => d.id !== id));
+      try {
+        const token = localStorage.getItem('@Regatec:token');
+        const response = await fetch(`${API_URL}/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+          fetchTipos();
+        }
+      } catch (error) {
+        console.error("Erro ao deletar:", error);
+      }
     }
   };
 
-  const openEditModal = (depto) => {
-    setContatoEditando(depto);
-    setFormData({ nome: depto.nome });
+  const openEditModal = (tipo) => {
+    setContatoEditando(tipo);
+    setFormData({ nome: tipo.name || tipo.nome });
     setIsModalOpen(true);
   };
 
@@ -53,7 +108,7 @@ function TiposDeContato() {
     <div className="content-area">
       <header className="content-header">
         <h1>TIPOS DE CONTATO</h1>
-        <button className="btn-new-user" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-new-user" onClick={() => { closeModal(); setIsModalOpen(true); }}>
           <UserPlus size={18} /> NOVO TIPO DE CONTATO
         </button>
       </header>
@@ -67,21 +122,27 @@ function TiposDeContato() {
             </tr>
           </thead>
           <tbody>
-            {departamentos.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
+                  <Loader2 className="animate-spin" style={{ margin: '0 auto' }} />
+                </td>
+              </tr>
+            ) : tiposContato.length === 0 ? (
               <tr>
                 <td colSpan="2" style={{ textAlign: 'center', padding: '20px' }}>
                   Nenhum tipo de contato registrado.
                 </td>
               </tr>
             ) : (
-              departamentos.map((depto) => (
-                <tr key={depto.id}>
+              tiposContato.map((tipo) => (
+                <tr key={tipo.id}>
                   <td>
-                    <span className="colaborador-name">{depto.nome}</span>
+                    <span className="colaborador-name">{tipo.name || tipo.nome}</span>
                   </td>
                   <td className="actions-cell">
-                    <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(depto)} />
-                    <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(depto.id)} />
+                    <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(tipo)} />
+                    <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(tipo.id)} />
                   </td>
                 </tr>
               ))
@@ -104,7 +165,7 @@ function TiposDeContato() {
                 <input 
                   type="text" 
                   required 
-                  placeholder="Ex: Comercial, Suporte, RH..."
+                  placeholder="Ex: Comercial, Financeiro..."
                   value={formData.nome}
                   onChange={(e) => setFormData({ nome: e.target.value })}
                 />

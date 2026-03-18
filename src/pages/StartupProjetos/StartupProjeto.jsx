@@ -39,7 +39,7 @@ export default function StartupProjeto() {
       <form className="space-y-6 pb-20" onSubmit={handleSubmit}>
         
         {/* Seção 01 - Startup */}
-        <div className={`card ${expandedCards.card1 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width  ${expandedCards.card1 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card1')}>
             <div className="header-content">
               <div className="badge">01</div>
@@ -121,7 +121,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 02 - Cliente */}
-        <div className={`card ${expandedCards.card2 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card2 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card2')}>
             <div className="header-content">
               <div className="badge">02</div>
@@ -202,7 +202,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 03 - Dados do Projeto */}
-        <div className={`card ${expandedCards.card3 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card3 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card3')}>
             <div className="header-content">
               <div className="badge">03</div>
@@ -286,7 +286,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 04 - Paisagista */}
-        <div className={`card ${expandedCards.card4 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card4 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card4')}>
             <div className="header-content">
               <div className="badge">04</div>
@@ -365,7 +365,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 05 - Dados Financeiros */}
-        <div className={`card ${expandedCards.card5 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card5 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card5')}>
             <div className="header-content">
               <div className="badge">05</div>
@@ -439,7 +439,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 06 - Fases do Projeto */}
-        <div className={`card ${expandedCards.card6 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card6 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card6')}>
             <div className="header-content">
               <div className="badge">06</div>
@@ -466,7 +466,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 07 - Setor de Projetos */}
-        <div className={`card ${expandedCards.card7 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card7 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card7')}>
             <div className="header-content">
               <div className="badge">07</div>
@@ -520,7 +520,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 08 - Faturamento */}
-        <div className={`card ${expandedCards.card8 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card8 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card8')}>
             <div className="header-content">
               <div className="badge">08</div>
@@ -680,7 +680,7 @@ export default function StartupProjeto() {
         </div>
 
         {/* Seção 09 - Observações */}
-        <div className={`card ${expandedCards.card9 ? 'expanded' : 'collapsed'}`}>
+        <div className={`card form-section-container form-full-width ${expandedCards.card9 ? 'expanded' : 'collapsed'}`}>
           <div className="card-header" onClick={() => toggleCard('card9')}>
             <div className="header-content">
               <div className="badge">09</div>
