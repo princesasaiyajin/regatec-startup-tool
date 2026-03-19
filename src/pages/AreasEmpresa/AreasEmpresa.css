@@ -1,0 +1,345 @@
+/* Estilos específicos para AreasEmpresa.jsx */
+
+.permissions-area {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.permissions-area label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--label-color);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.permissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  /* Hide default checkbox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.checkbox-label input[type="checkbox"]:checked::after {
+  content: ✓; /* Checkmark character */
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.permissions-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.permission-icon-checked {
+  color: var(--secondary-color);
+}
+
+.permission-icon-unchecked {
+  color: var(--border-color);
+}
+
+/* Reutilizando estilos de Cadastro.css e StartupProjeto.css */
+/* Certifique-se de que as variáveis de cor estão definidas em um arquivo CSS global ou importadas */
+
+/* Exemplo de como importar variáveis se necessário (ajuste o caminho) */
+/* @import url("../../styles/variables.css"); */
+
+/* Estilos para o modal (se não estiverem em Cadastro.css) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--label-color);
+}
+
+.modal-container form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--label-color);
+  margin-left: 0.25rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="email"],
+.modal-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  background: #fcfcfc;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.modal-select:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  background: white;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto; /* Empurra o footer para baixo */
+}
+
+.btn-cancel {
+  background: #ef4444;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #dc2626;
+}
+
+.btn-save {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.2s;
+}
+
+.btn-save:hover {
+  background: var(--secondary-color);
+}
+
+/* Estilos para a tabela e cabeçalho de conteúdo, se não estiverem em Cadastro.css */
+.content-area {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f4f7f6;
+  overflow-y: auto;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.content-header h1 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.btn-new-user {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btn-new-user:hover {
+  background: var(--secondary-color);
+}
+
+.data-card {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  overflow-x: auto; /* Para tabelas responsivas */
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+  background: rgba(4, 20, 16, 0.05);
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--label-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.colaborador-name,
+.email-text,
+.tipo-badge {
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+.tipo-badge {
+  background: #e0f2f7; /* Light blue */
+  color: #0891b2; /* Darker blue */
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.icon-edit,
+.icon-delete {
+  cursor: pointer;
+  color: var(--label-color);
+  transition: color 0.2s;
+}
+
+.icon-edit:hover {
+  color: var(--primary-color);
+}
+
+.icon-delete:hover {
+  color: #ef4444;
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+  .content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-container {
+    width: 95%;
+  }
+
+  .modal-header,
+  .modal-footer {
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-container form {
+    padding: 1.5rem;
+  }
+
+  .permissions-grid {
+    grid-template-columns: 1fr;
+  }
+}

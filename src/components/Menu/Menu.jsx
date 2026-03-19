@@ -35,6 +35,7 @@ function Menu({ activeTab, setActiveTab, onLogout }) {
           <li className={activeTab === 'logins' ? 'active' : ''} onClick={() => setActiveTab('logins')}>
             <Users size={18} /> Logins de Acesso
           </li>
+          <li onClick={() => setActiveTab('areas-empresa')} ><Building2 size={18} /> Áreas da Empresa</li>
           <li onClick={() => setActiveTab('vendedor')} ><Briefcase size={18} /> Vendedor</li>
           <li onClick={() => setActiveTab('projetistas')}><Settings size={18} /> Projetistas</li>
           <li onClick={() => setActiveTab('tipos-obra')}><HardHat size={18} /> Tipos de Obra</li>

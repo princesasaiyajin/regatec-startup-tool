@@ -3,6 +3,7 @@ import './index.css';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Login from './pages/Login/Login';
 import Menu from './components/Menu/Menu';
+import AreasEmpresa from './pages/AreasEmpresa/AreasEmpresa';
 import CadastroLogin from './pages/CadastroLogin/CadastroLogin';
 import CadastroVendedor from './pages/CadastroVendedor/CadastroVendedor';
 import CadastroProjetistas from './pages/CadastroProjetistas/CadastroProjetistas';
@@ -47,6 +48,7 @@ function App() {
           <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowX: 'hidden', marginLeft: '280px' }}>
             {activeTab === 'dashboard' && <Dashboard />}
             {activeTab === 'logins' && <CadastroLogin />}
+            {activeTab === 'areas-empresa' && <AreasEmpresa />}
             {activeTab === 'vendedor' && <CadastroVendedor />}
             {activeTab === 'projetistas' && <CadastroProjetistas />}
             {activeTab === 'tipos-obra' && <TiposDeObra />}

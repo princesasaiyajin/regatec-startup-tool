@@ -17,17 +17,22 @@ function LoginAcesso() {
     tipo: 'adm'
   });
 
+  // Carrega a lista de usuários da API
   const carregarUsuarios = async () => {
     try {
       const token = localStorage.getItem('@Regatec:token');
       const response = await api.get('/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
+      // Garante que pegamos a lista de usuários independente da estrutura do objeto de retorno
       const listaDeUsuarios = response.data.data?.users || response.data?.data || response.data || [];
       setUsuarios(Array.isArray(listaDeUsuarios) ? listaDeUsuarios : []);
     } catch (error) {
       console.error("Erro ao carregar usuários", error);
       setUsuarios([]);
+      if (error.response?.status === 401) {
+        alert("Sessão expirada. Por favor, faça login novamente.");
+      }
     }
   };
 
@@ -35,37 +40,56 @@ function LoginAcesso() {
     carregarUsuarios();
   }, []);
 
-const handleSave = async (e) => {
-  e.preventDefault();
-  const token = localStorage.getItem('@Regatec:token');
-  const telefoneLimpo = formData.telefone ? formData.telefone.replace(/\D/g, '') : "";
+  const handleSave = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('@Regatec:token');
+    const telefoneLimpo = formData.telefone ? formData.telefone.replace(/\D/g, '') : "";
 
-  const dadosParaEnviar = {
-    name: formData.nome,
-    corporate_email: formData.email,
-    type: formData.tipo,
-    phone: telefoneLimpo 
-  };
-
-  try {
-    if (usuarioEditando) {
-      await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      alert("Atualizado com sucesso!");
-    } else {
-      await api.post('/users', dadosParaEnviar, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      alert("Cadastrado com sucesso!");
+    // 1. Validação de senha: Novo usuário ou checkbox de alterar senha marcado
+    if ((!usuarioEditando || alterarSenha) && formData.senha !== formData.confirmarSenha) {
+      alert("As senhas não coincidem!");
+      return;
     }
-    carregarUsuarios();
-    closeModal();
-  } catch (error) {
-    console.error("ERRO DE REDE:", error);
-    alert("Erro ao salvar: " + (error.response?.status === 405 ? "Método PATCH não permitido no servidor" : "Verifique o console"));
-  }
-};
+
+    // 2. Montagem do objeto de envio conforme o histórico de correções
+    const dadosParaEnviar = {
+      name: formData.nome,
+      corporate_email: formData.email,
+      type: formData.tipo,
+      phone: telefoneLimpo 
+    };
+
+    // Só adiciona a senha se for novo cadastro OU se estiver editando e pediu para trocar senha
+    if (!usuarioEditando || alterarSenha) {
+      if (formData.senha) {
+        dadosParaEnviar.password = formData.senha;
+        dadosParaEnviar.password_confirmation = formData.confirmarSenha; 
+      }
+    }
+
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
+      if (usuarioEditando) {
+        // Rota de Edição
+        await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, config);
+        alert("Usuário atualizado com sucesso!");
+      } else {
+        // Rota de Criação (POST agora envia a senha corretamente)
+        await api.post('/users', dadosParaEnviar, config);
+        alert("Usuário cadastrado com sucesso!");
+      }
+      
+      carregarUsuarios();
+      closeModal();
+    } catch (error) {
+      console.error("ERRO DE REDE/API:", error.response?.data || error);
+      const msgErro = error.response?.data?.message || "Erro ao salvar. Verifique os dados ou o console.";
+      alert(msgErro);
+    }
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir este usuário?")) {
@@ -89,7 +113,7 @@ const handleSave = async (e) => {
       nome: usuario.name || '',
       email: usuario.corporate_email || '',
       tipo: usuario.type || 'adm',
-      telefone: formatarTelefone(usuario.phone || usuario.telefone || ''),
+      telefone: formatarTelefone(usuario.phone || ''),
       senha: '',
       confirmarSenha: ''
     });
@@ -194,6 +218,7 @@ const handleSave = async (e) => {
                 />
               </div>
 
+              {/* Seção de Senha dinâmica */}
               {(!usuarioEditando || alterarSenha) && (
                 <div className="password-section">
                   <div className="form-group">
@@ -226,8 +251,9 @@ const handleSave = async (e) => {
                     type="button"
                     className="btn-toggle-password"
                     onClick={() => setAlterarSenha(!alterarSenha)}
+                    style={{ background: 'none', border: 'none', color: '#007bff', cursor: 'pointer', fontSize: '0.8rem', padding: '10px 0' }}
                   >
-                     {alterarSenha ? "Cancelar alteração de senha" : "Alterar senha de acesso"}
+                     {alterarSenha ? "✕ Cancelar alteração de senha" : "🔑 Alterar senha de acesso"}
                   </button>
                 </div>
               )}
