@@ -5,6 +5,7 @@ import { UserPlus, Edit3, Trash2, X } from 'lucide-react';
 
 function LoginAcesso() {
   const [usuarios, setUsuarios] = useState([]);
+  const [areas, setAreas] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [alterarSenha, setAlterarSenha] = useState(false); 
@@ -14,17 +15,17 @@ function LoginAcesso() {
     telefone: '', 
     senha: '',
     confirmarSenha: '',
-    tipo: 'adm'
+    tipo: 'adm',
+    area_id: '' 
   });
 
-  // Carrega a lista de usuários da API
   const carregarUsuarios = async () => {
     try {
       const token = localStorage.getItem('@Regatec:token');
       const response = await api.get('/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // Garante que pegamos a lista de usuários independente da estrutura do objeto de retorno
+  
       const listaDeUsuarios = response.data.data?.users || response.data?.data || response.data || [];
       setUsuarios(Array.isArray(listaDeUsuarios) ? listaDeUsuarios : []);
     } catch (error) {
@@ -36,8 +37,27 @@ function LoginAcesso() {
     }
   };
 
+  const carregarAreas = async () => {
+    try {
+      // Substituir pela sua chamada de API real se já existir
+      // const response = await api.get('/areas-empresa');
+      // setAreas(response.data);
+      
+      // Mock para demonstração conforme solicitado
+      setAreas([
+        { id: '1', nome: 'Vendas' },
+        { id: '2', nome: 'Almoxarifado' },
+        { id: '3', nome: 'Faturamento' },
+        { id: '4', nome: 'Projeto' }
+      ]);
+    } catch (error) {
+      console.error("Erro ao carregar áreas", error);
+    }
+  };
+
   useEffect(() => {
     carregarUsuarios();
+    carregarAreas(); 
   }, []);
 
   const handleSave = async (e) => {
@@ -45,21 +65,19 @@ function LoginAcesso() {
     const token = localStorage.getItem('@Regatec:token');
     const telefoneLimpo = formData.telefone ? formData.telefone.replace(/\D/g, '') : "";
 
-    // 1. Validação de senha: Novo usuário ou checkbox de alterar senha marcado
     if ((!usuarioEditando || alterarSenha) && formData.senha !== formData.confirmarSenha) {
       alert("As senhas não coincidem!");
       return;
     }
 
-    // 2. Montagem do objeto de envio conforme o histórico de correções
     const dadosParaEnviar = {
       name: formData.nome,
       corporate_email: formData.email,
       type: formData.tipo,
-      phone: telefoneLimpo 
+      phone: telefoneLimpo,
+      area_id: formData.area_id 
     };
 
-    // Só adiciona a senha se for novo cadastro OU se estiver editando e pediu para trocar senha
     if (!usuarioEditando || alterarSenha) {
       if (formData.senha) {
         dadosParaEnviar.password = formData.senha;
@@ -73,11 +91,9 @@ function LoginAcesso() {
       };
 
       if (usuarioEditando) {
-        // Rota de Edição
         await api.patch(`/users/${usuarioEditando.id}`, dadosParaEnviar, config);
         alert("Usuário atualizado com sucesso!");
       } else {
-        // Rota de Criação (POST agora envia a senha corretamente)
         await api.post('/users', dadosParaEnviar, config);
         alert("Usuário cadastrado com sucesso!");
       }
@@ -115,7 +131,8 @@ function LoginAcesso() {
       tipo: usuario.type || 'adm',
       telefone: formatarTelefone(usuario.phone || ''),
       senha: '',
-      confirmarSenha: ''
+      confirmarSenha: '',
+      area_id: usuario.area_id || '' // Carrega a área na edição
     });
     setAlterarSenha(false); 
     setIsModalOpen(true);
@@ -127,7 +144,8 @@ function LoginAcesso() {
     setAlterarSenha(false); 
     setFormData({
       nome: '', email: '', telefone: '',
-      senha: '', confirmarSenha: '', tipo: 'adm'
+      senha: '', confirmarSenha: '', tipo: 'adm',
+      area_id: ''
     });
   };
 
@@ -155,6 +173,7 @@ function LoginAcesso() {
               <th>COLABORADOR</th>
               <th>E-MAIL</th>
               <th>TIPO DE LOGIN</th>
+              <th>ÁREA</th>
               <th className="actions-header">AÇÕES</th>
             </tr>
           </thead>
@@ -165,6 +184,9 @@ function LoginAcesso() {
                   <td><span className="colaborador-name">{user.name}</span></td>
                   <td><span className="email-text">{user.corporate_email}</span></td>
                   <td><span className="tipo-badge">{user.type}</span></td>
+                  <td><span className="tipo-badge" style={{ background: '#f0fdf4', color: '#166534' }}>
+                    {areas.find(a => a.id === String(user.area_id))?.nome || 'N/A'}
+                  </span></td>
                   <td className="actions-cell">
                     <Edit3 size={18} className="icon-edit" onClick={() => openEditModal(user)} />
                     <Trash2 size={18} className="icon-delete" onClick={() => handleDelete(user.id)} />
@@ -173,7 +195,7 @@ function LoginAcesso() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>Nenhum usuário encontrado.</td>
+                <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>Nenhum usuário encontrado.</td>
               </tr>
             )}
           </tbody>
@@ -218,7 +240,6 @@ function LoginAcesso() {
                 />
               </div>
 
-              {/* Seção de Senha dinâmica */}
               {(!usuarioEditando || alterarSenha) && (
                 <div className="password-section">
                   <div className="form-group">
@@ -268,6 +289,21 @@ function LoginAcesso() {
                   <option value="adm">Administrativo</option>
                   <option value="editor">Editor</option>
                   <option value="viewer">Visualizador</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>ÁREA DA EMPRESA</label>
+                <select
+                  className="modal-select"
+                  value={formData.area_id}
+                  onChange={(e) => setFormData({ ...formData, area_id: e.target.value })}
+                  required
+                >
+                  <option value="">Selecione uma área...</option>
+                  {areas.map(area => (
+                    <option key={area.id} value={area.id}>{area.nome}</option>
+                  ))}
                 </select>
               </div>
 

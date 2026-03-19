@@ -15,7 +15,6 @@ function AreasEmpresa() {
 
   useEffect(() => {
     const fetchAreas = async () => {
-      // Mock data for initial state
       setAreas([
         { id: 1, nome: 'Vendas', dias: 5, permissoesProjeto: [true, true, false, false, false, false, false, false, false], permissoesObra: Array(9).fill(false) },
         { id: 2, nome: 'Projeto', dias: 10, permissoesProjeto: [false, false, true, true, true, true, true, false, false], permissoesObra: Array(9).fill(false) },

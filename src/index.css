@@ -1,4 +1,4 @@
-:root { /* Mudei de #root para :root para garantir alcance global */
+:root { 
   --primary-color: #041410;
   --secondary-color: #10b981;
   --color-destructive: #ef4444;
@@ -8,21 +8,21 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  flex-direction: row; /* Mantém o Sidebar ao lado do Conteúdo */
+  flex-direction: row; 
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased; /* Deixa as fontes mais nítidas */
+  -webkit-font-smoothing: antialiased; 
   -moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
   width: 100%;
   height: 100%;
-  overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
+  overflow-x: hidden; 
 }
 
 body {
